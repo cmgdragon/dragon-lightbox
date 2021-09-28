@@ -1,6 +1,7 @@
 import ContainerAttributes from "../../constants/containerAttributes";
 import ContainerTypes from "../../constants/containerTypes";
 import videoExtensions from "../../constants/videoExtensions";
+import videoProviders from "../../constants/videoProviders";
 import IConfig from "../../interfaces/IConfig";
 import DragonLightBox from "../abstract/DragonLightBox";
 import { ImageLightBox, VideoLightBox, EmbedLightBox } from "../lightbox-types";
@@ -53,7 +54,7 @@ class LightBoxNode {
             return new VideoLightBox(resource, config);
         }
     
-        if (type === ContainerTypes.EMBED) {
+        if (type === ContainerTypes.EMBED || videoProviders.some(provider => resource.indexOf(provider) !== -1)) {
             return new EmbedLightBox(resource, config);
         }
 

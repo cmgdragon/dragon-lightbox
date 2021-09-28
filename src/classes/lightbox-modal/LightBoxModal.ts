@@ -1,4 +1,4 @@
-import addStyles from "../../styles/addStyles";
+import addStyles from "../../styles/functions/addStyles";
 import LightBoxContainer from "../lightbox-container/LightBoxContainer";
 
 class LightBoxModal {

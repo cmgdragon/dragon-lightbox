@@ -3,7 +3,7 @@ enum ContainerAttributes {
     CONFIG = 'data-dlconfig',
     TYPE = 'data-dlightbox-type',
     URL = 'data-dlightbox-url',
-    LAZY = 'data-dlightbox-lazy' //used internally
+    CACHED = 'data-dlightbox-cached' //used internally
 }
 
 export default ContainerAttributes;

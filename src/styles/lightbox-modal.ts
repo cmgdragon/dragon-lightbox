@@ -14,7 +14,7 @@ const lightbox_modal_styles = (config: IConfig) => `
     position: absolute;
     top: 0;
     left: 0;
-    background-color: rgba(0,0,0,.7);
+    background-color: rgba(0,0,0,.8);
 }
 `;
 

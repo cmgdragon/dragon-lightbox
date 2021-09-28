@@ -9,10 +9,27 @@ class ImageLightBox extends DragonLightBox {
 
     override buildElement(): void {
         const image = document.createElement('img');
-        image.src = this.resourceUrl;
-        image.classList.add('lightbox-image');
-
+        image.setAttribute('tabindex', '0');
+        image.hidden = true;
         this.element = image;
+
+        image.classList.add('lightbox-image');
+        this.spinner.showSpinner();
+        
+        image.src = this.resourceUrl;
+
+        image.onerror = () => {
+            console.log("didn't load");
+            this.spinner.hideSpinner();
+            this.error = true;
+        }
+
+        image.onload = () => {
+            image.classList.add('lightbox-shadow');
+            this.spinner.hideSpinner();
+            image.hidden = false;
+        }
+
     }
 
 }
