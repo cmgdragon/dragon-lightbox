@@ -35,7 +35,7 @@ class DLightBox {
         DLightBox._instances.delete(lb.id);
     }
 
-    create(resources: [string, Attribute?] | [string, Attribute?][], _config?: IConfig): ILightBoxContainerInstance {
+    create(resources: [string, Attribute[]?] | [string, Attribute[]?][], _config?: IConfig): ILightBoxContainerInstance {
         if (typeof resources[0] !== 'string' && !Array.isArray(resources[0])) {
             throw new Error("Invalid type");
         }
@@ -45,13 +45,13 @@ class DLightBox {
         for (const [url, attributes] of resourcesList) {
 
             const element = document.createElement('div');
-            const _attributes = <Attribute[]> attributes;
+            const _attributes = <Attribute[]> attributes ?? null;
 
             if (_attributes && _attributes.find(a => a.name === ContainerAttributes.TYPE)) {
                 element.setAttribute(ContainerAttributes.TYPE, _attributes.find(a => a.name === ContainerAttributes.TYPE)?.value ?? '')
             }
             element.setAttribute('data-dlightbox', String(url));
-            resourceElements.push({ element, attributes: <Attribute[]>attributes });
+            resourceElements.push({ element, attributes: _attributes });
 
         }
 
