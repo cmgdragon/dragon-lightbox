@@ -11,7 +11,7 @@ const lightbox_container_styles = (config: IConfig) =>`
 }
 .lightbox-shadow { filter: drop-shadow(0 0 15px black); }
 .lightbox-container__media {
-    ${Number.isInteger(config.autoescale) ? `width: ${config.autoescale}px` : 'width: 80%'};
+    ${Number.isInteger(config.autoscale) ? `width: ${config.autoscale}px` : 'width: 80%'};
     max-height: 90vh;
     width: 100%;
     max-width: 80%;

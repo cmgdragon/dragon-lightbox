@@ -4,7 +4,7 @@ interface IConfig {
     lazy: boolean,
     fireevent: string,
     autoplay: boolean,
-    autoescale: number | boolean,
+    autoscale: number | boolean,
     type?: string,
     attributes?: Attribute[]
 }

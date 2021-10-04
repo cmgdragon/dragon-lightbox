@@ -4,7 +4,7 @@ const defaultConfig: IConfig = {
     lazy: true,
     fireevent: 'click',
     autoplay: false,
-    autoescale: true,
+    autoscale: true,
 }
 
 export default defaultConfig;
