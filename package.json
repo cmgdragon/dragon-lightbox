@@ -3,15 +3,30 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
-  "scripts": {
-    "dev": "parcel index.html --open"
+  "targets": {
+    "main": false
   },
+  "scripts": {
+    "dev": "npm run clear && parcel index.html --open",
+    "parcel:build": "parcel build index.js --no-source-maps",
+    "clear": "rimraf dist",
+    "css:clear": "node scripts/cssCleaner.js",
+    "build": "npm run clear && npm run parcel:build && npm run css:clear"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "maintained node versions"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.0.0-rc.0",
+    "@parcel/compressor-brotli": "^2.0.0-nightly.2460",
+    "@parcel/compressor-gzip": "^2.0.0-nightly.2460",
     "parcel": "^2.0.0-rc.0",
+    "rimraf": "3.0.2",
     "typescript": "^4.4.3"
-  }
+  },
+  "dependencies": {}
 }

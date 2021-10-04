@@ -1,32 +1,34 @@
 import IConfig from "../../interfaces/IConfig";
+import Attribute from "../../types/Attribute";
 import DragonLightBox from "../abstract/DragonLightBox";
 
 class ImageLightBox extends DragonLightBox {
     
-    constructor(resource: string, config: IConfig) {
-        super(resource, config);
+    constructor(resource: string, attributes: Attribute[], config: IConfig) {
+        super(resource, attributes, config);
     }
 
     override buildElement(): void {
         const image = document.createElement('img');
-        image.setAttribute('tabindex', '0');
         image.hidden = true;
         this.element = image;
+        this.setCommonAttributes();
 
-        image.classList.add('lightbox-image');
+        image.classList.add('dlightbox-image');
         this.spinner.showSpinner();
         
         image.src = this.resourceUrl;
 
         image.onerror = () => {
-            console.log("didn't load");
-            this.spinner.hideSpinner();
-            this.error = true;
+            this.loaded = false;
+            if (this.element.getAttribute('src') == '') return;
+            this.spinner.showSpinner('Error on loading image');
+            this.spinner.element.classList.add('error');
         }
 
         image.onload = () => {
-            image.classList.add('lightbox-shadow');
             this.spinner.hideSpinner();
+            this.loaded = true;
             image.hidden = false;
         }
 

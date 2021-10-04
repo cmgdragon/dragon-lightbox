@@ -1,60 +1,57 @@
 import ContainerAttributes from "../../constants/containerAttributes";
 import IConfig from "../../interfaces/IConfig";
+import Attribute from "../../types/Attribute";
 import DragonLightBox from "../abstract/DragonLightBox";
 import getVideoProviderUrl from "./functions/getVideoProviderUrl";
 
 class EmbedLightBox extends DragonLightBox {
     
-    protected isLoaded: boolean = false;
-    constructor(resource: string, config: IConfig) {
-        super(resource, config);
+    constructor(resource: string, attributes: Attribute[], config: IConfig) {
+        super(resource, attributes, config);
     }
     
     override buildElement(): void {
         const iframe = document.createElement('iframe');
         iframe.hidden = true;
         this.element = iframe;
+        this.spinner.showSpinner();
+        this.setCommonAttributes();
 
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
         iframe.setAttribute('tabindex', '0');
         iframe.setAttribute(ContainerAttributes.CACHED, this.resourceUrl);
         iframe.setAttribute('frameborder', '0');
         iframe.allowFullscreen = true;
-        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-        iframe.classList.add('lightbox-embed');
+        iframe.classList.add('dlightbox-embed');
         iframe.style.display = 'none';
-        this.spinner.showSpinner();
+        let iframeSrc = '';
         
-        let iframeSrc = getVideoProviderUrl(this.resourceUrl);
+        iframeSrc = getVideoProviderUrl(this.resourceUrl);
         
-        if (this.config.autoplay) {
+        if (iframeSrc!== '' && this.config.autoplay) {
             iframeSrc += '?autoplay=1';
         }
-        
-        iframe.src = iframeSrc;
 
-        setTimeout(() => {
-            this.element.insertAdjacentElement('afterend', iframe);   
-        }, 0);
-        
+        iframe.src = iframeSrc === '' ? this.resourceUrl : iframeSrc;
+      
         iframe.onload = () => {
-            console.log('LOADED IFRAME');
-            this.isLoaded = true;
+            this.loaded = true;
             if (!this.isSelected) return;
             iframe.classList.add('lightbox-shadow');
             this.spinner.hideSpinner();
             iframe.hidden = false;
             iframe.style.display = '';
         };
-        
+
         iframe.onerror = () => {
-            this.error = true;
-            this.spinner.hideSpinner();
-            console.log("didn't load");
+            this.loaded = false;
+            this.element.remove();
+            this.spinner.showSpinner('Error on loading iframe');
+            this.spinner.element.classList.add('error');
         }
 
-        iframe.onblur = () => console.log('BLUR');
-        iframe.onfocus = () => console.log('BLUR');
     }
+
     override open(): void {
         if (this.config.autoplay) {
             this.buildElement();
@@ -70,12 +67,17 @@ class EmbedLightBox extends DragonLightBox {
         }
     }
 
-    override close(): void {
-        this.spinner.hideSpinner();
-        if (this.config.autoplay) {
+    override abortDownloadingUnloadedNode = () => {
+        if (!this.loaded && this.element.getAttribute('src') == '') {
             this.element.remove();
             return;
         }
+    }
+
+    override close(): void {
+        this.abortDownloadingUnloadedNode()
+        this.spinner.hideSpinner();
+        this.loaded = false;
         this.element.classList.remove('lightbox-shadow');
         this.element.style.display = 'none';
         this.isSelected = false;

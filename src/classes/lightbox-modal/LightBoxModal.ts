@@ -23,6 +23,7 @@ class LightBoxModal {
     private buildModal(): HTMLElement {
         document.body.classList.add('overflow-hidden');
         const modal = document.createElement('div');
+        modal.id = 'dragon-lightbox-modal';
         modal.classList.add('lightbox-modal');
 
         modal.prepend(addStyles(this.container.config));

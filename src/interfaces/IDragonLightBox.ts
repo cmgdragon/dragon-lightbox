@@ -1,7 +1,7 @@
 interface IDragonLightBox {
     resourceUrl: string,
     element: HTMLElement,
-    error: boolean,
+    loaded: boolean,
     isSelected: boolean,
     open: () => void,
     close: () => void

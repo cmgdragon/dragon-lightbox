@@ -1,5 +1,5 @@
 import IConfig from "../../interfaces/IConfig";
-import DragonLightBox from "../abstract/DragonLightBox";
+import IResourceElement from "../../interfaces/IResourceElement";
 import LightBoxNode from "./LightBoxNode";
 
 class LightBoxList {
@@ -8,14 +8,14 @@ class LightBoxList {
     tail: LightBoxNode;
     size: number;
 
-    constructor(lightboxlist: Element[], config: IConfig) {
-
-        this.head = new LightBoxNode(0, lightboxlist[0] as HTMLDivElement, config);
+    constructor(lightboxlist: IResourceElement[], config: IConfig) {
+        
+        this.head = new LightBoxNode(0, lightboxlist[0].element as HTMLDivElement, lightboxlist[0].attributes, config);
         this.head.prev = null;
         let currentNode: LightBoxNode = this.head;
 
         for (let i = 1; i < lightboxlist.length; i++) {
-            currentNode.next = new LightBoxNode(i, lightboxlist[i] as HTMLDivElement, config);
+            currentNode.next = new LightBoxNode(i, lightboxlist[i].element as HTMLDivElement, lightboxlist[0].attributes, config);
             currentNode.prev = this.lookup(i - 2);
             currentNode = currentNode.next;
         }

@@ -2,7 +2,7 @@ class LightBoxSpinner {
     private static lbSpinner: LightBoxSpinner;
     private _element: HTMLElement;
 
-    constructor() {
+    private constructor() {
         this._element = this.generateSpinner();
     }
     
@@ -18,20 +18,19 @@ class LightBoxSpinner {
         return this._element;
     }
 
-    showSpinner(): void {
+    showSpinner(ariaLabel?: string): void {
         if (this._element) {
-            console.log('shown')
-            setTimeout(() => {
-                
-                document.getElementById('lightbox-spinner')!.style.display = '';
-            }, 0);
+            this._element.ariaLabel = ariaLabel ? ariaLabel : '';
+            this._element.classList.remove('error');
+            this._element.style.display = '';
         }
     }
 
     hideSpinner(): void {
         if (this._element) {
-            console.log('hidden')
-            document.getElementById('lightbox-spinner')!.style.display = 'none';
+            this._element.ariaLabel = '';
+            this._element.classList.remove('error');
+            this._element.style.display = 'none';
         }
     }
 

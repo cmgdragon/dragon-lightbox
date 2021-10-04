@@ -1,11 +1,12 @@
 import ContainerAttributes from "../../constants/containerAttributes";
 import IConfig from "../../interfaces/IConfig";
+import Attribute from "../../types/Attribute";
 import DragonLightBox from "../abstract/DragonLightBox";
 
 class VideoLightBox extends DragonLightBox {
     
-    constructor(resource: string, config: IConfig) {
-        super(resource, config);
+    constructor(resource: string, attributes: Attribute[], config: IConfig) {
+        super(resource, attributes, config);
     }
     
     override buildElement(): void {
@@ -13,10 +14,11 @@ class VideoLightBox extends DragonLightBox {
         video.setAttribute('tabindex', '0');
         video.hidden = true;
         this.element = video;
+        this.setCommonAttributes();
 
         video.setAttribute(ContainerAttributes.CACHED, this.resourceUrl);
         video.controls = true;
-        video.classList.add('lightbox-video');
+        video.classList.add('dlightbox-video');
         this.spinner.showSpinner();
 
         const source = document.createElement('source');
@@ -27,13 +29,14 @@ class VideoLightBox extends DragonLightBox {
         video.append(source);
 
         source.onerror = () => {
-            this.error = true;
-            this.spinner.hideSpinner();
-            console.log("didn't load")
+            this.loaded = false;
+            this.spinner.showSpinner('Error on loading video');
+            this.spinner.element.classList.add('error');
         }
 
         video.oncanplay = () => { 
-            console.log('LOADED');
+            this.loaded = true
+            if (this.element.getAttribute('src') == '') return;
             this.spinner.hideSpinner();
             video.classList.add('lightbox-shadow');
             video.hidden = false;
@@ -45,8 +48,9 @@ class VideoLightBox extends DragonLightBox {
     }
 
     override open(): void {
-        if (!this.isElementBuilt()) {
+        if (!this.loaded || !this.isElementBuilt()) {
             this.buildElement();
+            return;
         }
         this.element.style.display = '';
         if (this.config.autoplay) {
@@ -55,6 +59,8 @@ class VideoLightBox extends DragonLightBox {
     }
 
     override close() {
+        this.abortDownloadingUnloadedNode()
+        this.spinner.hideSpinner();
         this.element.style.display = 'none';
         this.isSelected = false;
         (this.element as HTMLVideoElement).pause();

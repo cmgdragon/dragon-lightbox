@@ -1,4 +1,10 @@
+import ContainerAttributes from "../../constants/containerAttributes";
+import customEvents from "../../constants/customEvents";
 import IConfig from "../../interfaces/IConfig";
+import IResourceElement from "../../interfaces/IResourceElement";
+import ElementBind from "../../types/ElementBind";
+import DragonLightBox from "../abstract/DragonLightBox";
+import DLightBox from "../DLightBox";
 import LightBoxList from "../lightbox-list/LightBoxList";
 import LightBoxNode from "../lightbox-list/LightBoxNode";
 import LightBoxModal from "../lightbox-modal/LightBoxModal";
@@ -6,40 +12,129 @@ import LightBoxSpinner from "../lightbox-spinner/LightBoxSpinner";
 
 class LightBoxContainer {
 
+    id: number;
     lightboxList: LightBoxList;
     private selectedBox: LightBoxNode;
     private modal: LightBoxModal;
     private spinner: LightBoxSpinner;
-    private isGroup: boolean;
     private _config: IConfig;
+    private elementCount: number;
     container: HTMLElement | null;
+    private _elements: Element[];
+    private _bindedElements: ElementBind[] = [];
     mediaElement: HTMLElement;
+    private events: Map<String, CustomEvent>;
 
-    constructor(elements: Element[], config: IConfig) {
+    constructor(resources: IResourceElement[], config: IConfig, nobind?: boolean) {
         this.container = null;
+        this.id = DLightBox._instances.size;
         this.mediaElement = document.createElement('div');
         this._config = config;
         this.modal = new LightBoxModal(this);
         this.spinner = LightBoxSpinner.getSpinner();
-        this.isGroup = elements.length === 1 ? false : true;
-        this.lightboxList = new LightBoxList(elements, this.config);
+        this.elementCount = resources.length;
+        this.lightboxList = new LightBoxList(resources, this.config);
         this.selectedBox = this.lightboxList.head;
         this.selectedBox.lightbox.isSelected = true;
+        this._elements = resources.map(r => r.element);
+        this.events = this.buildCustomEvents({ detail: {
+            config: this.config,
+            count: this.elementCount,
+            id: this.id,
+            elements: this.elements,
+            selectedBox: { 
+                resourceUrl: this.selectedBox.lightbox.resourceUrl,
+                element: this.selectedBox.lightbox.element,
+                attributes: this.selectedBox.lightbox.attributes
+            }
+        } })
 
-        this.addNodesEventListeners(elements);
+        if (!nobind) {
+            const elementsBind = { elements: this.elements, fireEvent: config.fireEvent };
+            this.addNodeEventListeners([elementsBind]);
+        }
     }
 
     get config() {
         return this._config;
     }
 
-    private addNodesEventListeners(elements: Element[]) {
-        elements.forEach(element => element.addEventListener('click', () => {
-            const id = element.getAttribute('data-dlightbox-id');
-            const lightbox = this.getLightBoxByIndex(Number(id));
-            this.openContainer(lightbox);
-            document.getElementById('lightbox-container__hidden-tabindex')?.focus();
-        }))
+    get elements() {
+        return this._elements;
+    }
+
+    get bindings() {
+        return this._bindedElements;
+    }
+
+    listen(listener: string, cb: () => void) {
+        this.mediaElement.addEventListener(listener, cb)
+    }
+
+    addNodeEventListeners(elementsList: (ElementBind[] | ElementBind) | (NodeList | Node)) {
+        if (!('length' in elementsList)) {
+            if ( !elementsList.hasOwnProperty('elements')) {
+                if ([elementsList].length !== this.elementCount) {
+                    throw new Error(`You must provide a set of ${this.elementCount} elements!`);
+                }
+                this.bindElements([elementsList] as Element[]);
+                this._bindedElements.push({ elements: [elementsList] as Element[], fireEvent: this.config.fireEvent })
+                return;
+            } else {
+                elementsList = [elementsList as ElementBind];
+            }
+        } else { //check if NodeList o ElementBind
+
+            if ( !elementsList[0].hasOwnProperty('elements')) {
+                if (elementsList.length !== this.elementCount) {
+                    throw new Error(`You must provide a set of ${this.elementCount} elements!`);
+                }
+                this.bindElements([...elementsList].map(e => e as Element))
+                this._bindedElements.push({ elements: [...elementsList].map(e => e as Element), fireEvent: this.config.fireEvent })
+                return;
+            }
+        }
+        for (let { elements, fireEvent } of elementsList as ElementBind[]) {
+            if (!Array.isArray(elements)) {
+                elements = [elements];
+            }
+            
+            this.bindElements(elements, fireEvent)
+            this._bindedElements.push({ elements, fireEvent })
+        } 
+    }
+
+    bindElements(elementsList: Element[], fireEvent?: string) {
+        const ids = [...Array(this.elementCount).keys()];
+        elementsList.forEach(element => {
+            if (element.getAttribute(ContainerAttributes.ID)) {
+                ids.splice(Number(element.getAttribute(ContainerAttributes.ID)), 1)
+            }
+            element.addEventListener(fireEvent ?? this.config.fireEvent, this.nodeListener);
+            if (fireEvent == 'click') element.addEventListener('keydown', this.nodeListener)
+        });
+        elementsList.filter(e => !e.getAttribute(ContainerAttributes.ID)).forEach((element, i) => 
+            element.setAttribute(ContainerAttributes.ID, String(ids[i])));
+    }
+
+    removeNodeEventListeners() {
+        this.destroyContainer();
+        for (const { elements, fireEvent } of this._bindedElements) {
+            elements.forEach(element => {
+                element.removeEventListener(fireEvent ?? this.config.fireEvent, this.nodeListener);
+                if (fireEvent == 'click') element.removeEventListener('keydown', this.nodeListener)
+            });
+        }
+    }
+
+    private nodeListener = (event: Event) => {
+        if (event.type == 'keydown') {
+            if ((event as KeyboardEvent).key != 'Enter') return;
+        }
+        const id = (event.target as Element).getAttribute(ContainerAttributes.ID);
+        const lightbox = this.getLightBoxByIndex(Number(id));
+        this.openContainer(lightbox);
+        document.getElementById('lightbox-container__hidden-tabindex')?.focus();
     }
 
     private closeContainerBodyEvent = (event: KeyboardEvent) => {
@@ -48,11 +143,33 @@ class LightBoxContainer {
             }
     }
 
+    private nextArrowModalEvent = (event: KeyboardEvent) => {
+        if (this.container && event.key ===  'ArrowRight') {
+            this.next(event);
+        }
+    }
+
+    private prevArrowModalEvent = (event: KeyboardEvent) => {
+        if (this.container && event.key ===  'ArrowLeft') {
+            this.prev(event);
+        }
+    }
+
+    private buildCustomEvents = (props: CustomEventInit): Map<String, CustomEvent> => {
+        const eventMap = new Map<String, CustomEvent>();
+        for (const name of Object.values(customEvents)) {
+            eventMap.set(name, new CustomEvent(name, props));
+        }
+    
+        return eventMap;
+    }
+
     private createContainer(): void {
         this.container = document.createElement('div');
         document.body.addEventListener('keydown', this.closeContainerBodyEvent);
         this.container.classList.add('lightbox-container');
         this.container.setAttribute('tabindex', '-1');
+        this.mediaElement.setAttribute('tabindex', '0');
         this.mediaElement.classList.add('lightbox-container__media');
         this.mediaElement.append(this.spinner.element);
 
@@ -63,7 +180,7 @@ class LightBoxContainer {
 
         this.container.prepend(close);
 
-        if (this.isGroup) {
+        if (this.elementCount > 1) {
             const nextArrow = document.createElement('div');
             const prevArrow = document.createElement('div');
             nextArrow.classList.add('lightbox-container__next-arrow');
@@ -81,49 +198,83 @@ class LightBoxContainer {
             prevArrow.addEventListener('click', event => this.prev(event));
             nextArrow.addEventListener('keydown', event => { if (event.key === 'Enter') this.next(event) });
             prevArrow.addEventListener('keydown', event => { if (event.key === 'Enter') this.prev(event) });
-            this.modal.getModal().addEventListener('keydown', event => { if (event.key === 'ArrowRight') this.next(event) });
-            this.modal.getModal().addEventListener('keydown', event => { if (event.key === 'ArrowLeft') this.prev(event) });
-
+            this.modal.getModal().addEventListener('keydown', this.nextArrowModalEvent);
+            this.modal.getModal().addEventListener('keydown', this.prevArrowModalEvent);
 
             this.container.prepend(prevArrow);
             this.container.append(this.mediaElement);
             this.container.append(nextArrow);
         } else {
-            this.container.append(this.mediaElement);
+            const lastFocusableElement = document.createElement('div');
+            lastFocusableElement.tabIndex = 0;
+            this.container.append(lastFocusableElement);
+
+            close.addEventListener('keydown', ({key}) => { 
+                if (key === 'Tab') {
+                    setTimeout(() => this.mediaElement.focus(), 0);
+                }
+            });
+
+            this.container.prepend(this.mediaElement);
         }
 
         setTimeout(() => this.container!.focus(), 0);
     }
 
     destroyContainer(): void {
-        document.body.setAttribute('tabindex', '');
-        this.selectedBox.lightbox.close();
-        this.container!.remove();
-        this.modal.getModal().remove();
-        document.body.removeEventListener('keydown', this.closeContainerBodyEvent);
-        this.container = null;
+        if (!this.container) return;
+        this.modal.getModal().classList.remove('lightbox-modal-open');
+        this.mediaElement.classList.remove('lightbox-container__media-open');
+        setTimeout(() => {           
+            this.mediaElement.blur();
+            document.body.removeAttribute('tabindex');
+            this.selectedBox.lightbox.close();
+            this.container!.remove();
+            this.modal.getModal().remove();
+            document.body.removeEventListener('keydown', this.closeContainerBodyEvent);
+            this.modal.getModal().removeEventListener('keydown', this.nextArrowModalEvent);
+            this.modal.getModal().removeEventListener('keydown', this.prevArrowModalEvent);
+            this.mediaElement?.dispatchEvent(this.events.get(customEvents.CLOSE) as CustomEvent);
+            this.container = null;
+        }, 200);
     }
 
     private getLightBoxByIndex(index: number): LightBoxNode {
         return this.lightboxList.lookup(index)!;
     }
 
-    openContainer(box: LightBoxNode) {
+    openContainer(box: LightBoxNode | number = this.lightboxList.head) {
+        if (document.getElementById('dragon-lightbox-modal')) return;
+
         document.body.setAttribute('tabindex', '-1');
-        const lightbox = box.lightbox;
+        this.spinner.element.classList.remove('error');
+
+        const lightboxNode = Number.isInteger(box) ? 
+            this.getLightBoxByIndex(<number>box)
+            : (box as LightBoxNode);
+
+        if (!(lightboxNode.lightbox instanceof DragonLightBox)) {
+            throw new Error("Invalid lightbox");
+        }
 
         const modal = this.modal.getModal();
 
         this.createContainer();
-        lightbox.open();
-        this.mediaElement.append(lightbox.element);
+        setTimeout(() => {           
+            this.modal.getModal().classList.add('lightbox-modal-open');
+            this.mediaElement.classList.add('lightbox-container__media-open');
+        }, 0);
 
+        lightboxNode.lightbox.open();
+        this.mediaElement.append(lightboxNode.lightbox.element!);
+        
         modal.append(this.container!);
         modal.append(this.container!);
         document.body.prepend(modal);
-
+        this.mediaElement?.dispatchEvent(this.events.get(customEvents.OPEN) as CustomEvent);
+        
         this.selectedBox.lightbox.isSelected = false;
-        this.selectedBox = box;
+        this.selectedBox = lightboxNode;
         this.selectedBox.lightbox.isSelected = true;
     }
 
@@ -133,24 +284,29 @@ class LightBoxContainer {
         }
     }
 
-    openLightBox(lightboxnode: LightBoxNode, isNext: boolean) {
+    private openLightBox(lightboxnode: LightBoxNode, isNext: boolean) {
         const selectedBox = lightboxnode;
+
+        setTimeout(() => {
+            this.mediaElement.classList.remove(`lightbox-type__closed-${isNext ? 'left' : 'right'}`);
+        }, 100);
         
+        this.mediaElement.classList.add(`lightbox-type__closed-${isNext ? 'left' : 'right'}`);
+
         selectedBox.lightbox.open();
-        this.appendMediaElement(lightboxnode.lightbox.element)
+        this.appendMediaElement(lightboxnode.lightbox.element!);
 
         this.selectedBox = isNext ? selectedBox.prev! : selectedBox.next!;
     }
 
-    closeLightBox(node: LightBoxNode) {
+    private closeLightBox(node: LightBoxNode) {
         node.lightbox.close();
     }
 
-    next(event: Event) {
+    private next(event: Event) {
         event.stopPropagation();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.tail) {
-            console.log('is tail')
             this.openLightBox(this.lightboxList.head, true);
 
             this.selectedBox = this.lightboxList.head;
@@ -161,9 +317,10 @@ class LightBoxContainer {
             this.selectedBox = this.selectedBox.next!;
             this.selectedBox.lightbox.isSelected = true;
         }
+        this.mediaElement?.dispatchEvent(this.events.get(customEvents.CHANGE) as CustomEvent);
     }
   
-    prev(event: Event) {
+    private prev(event: Event) {
         event.stopPropagation();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.head) {
@@ -177,6 +334,7 @@ class LightBoxContainer {
             this.selectedBox = this.selectedBox.prev!;
             this.selectedBox.lightbox.isSelected = true;
         }
+        this.mediaElement?.dispatchEvent(this.events.get(customEvents.CHANGE) as CustomEvent);
     }
 
 }

@@ -1,22 +1,26 @@
+import ContainerAttributes from "../../constants/containerAttributes";
 import IConfig from "../../interfaces/IConfig";
 import IDragonLightBox from "../../interfaces/IDragonLightBox";
+import Attribute from "../../types/Attribute";
 import LightBoxSpinner from '../lightbox-spinner/LightBoxSpinner';
 
 abstract class DragonLightBox implements IDragonLightBox {
 
     private _element: HTMLElement | null;
     private _resourceUrl: string;
-    private _error: boolean;
-    protected config: IConfig;
+    private _loaded: boolean;
+    private _config: IConfig;
     private _isSelected: boolean;
     private _spinner: LightBoxSpinner;
-    constructor(resourceUrl: string, config: IConfig) {
+    private _attributes: Attribute[];
+    constructor(resourceUrl: string, attributes: Attribute[], config: IConfig) {
         this._resourceUrl = resourceUrl;
-        this.config = config;
+        this._attributes = attributes;
+        this._config = config;
         this._isSelected = false;
         this._element = null;
-        this._error = false;
-        this._spinner = new LightBoxSpinner();
+        this._loaded = false;
+        this._spinner = LightBoxSpinner.getSpinner();
 
         if (!this.config.lazy) {
             this.buildElement();
@@ -26,8 +30,20 @@ abstract class DragonLightBox implements IDragonLightBox {
     get element() {
         return this._element!;
     }
+    get config() {
+        return this._config;
+    }
+    get attributes() {
+        return this._attributes;
+    }
     get isSelected() {
         return this._isSelected;
+    }
+    get loaded() {
+        return this._loaded;
+    }
+    set loaded(loaded: boolean) {
+        this._loaded = loaded;
     }
     get spinner() {
         return this._spinner;
@@ -41,31 +57,43 @@ abstract class DragonLightBox implements IDragonLightBox {
     get resourceUrl() {
         return this._resourceUrl;
     }
-    set error(didLoad: boolean) {
-        this._error = didLoad;
-    }
     
     protected buildElement(): any {}
 
+    protected abortDownloadingUnloadedNode = () => {
+        this.spinner.element.classList.remove('error');
+        if (!this.loaded && this.element.getAttribute('src') != '') {    
+            this.element.setAttribute('src', '');
+            this.element.remove();
+            return;
+        }
+    }
+    protected setCommonAttributes = (): void => {
+        if (!this.element || !this.attributes) return;
+        for (const { name, value } of this.attributes) {
+            if (Object.keys(this.config).find(k => k === name) || !value) continue;
+            this.element.setAttribute(name, value);
+        }
+    }
     protected isElementBuilt(): boolean {
         if (!this.element) return false;
 
-        if (this._error) { this.element.remove() }
-
         const attributesValues = Object.values(this.element.attributes).map(attr => attr.nodeValue);
-        if (this._error || !attributesValues.includes(this.resourceUrl)) {
-            this.error = false;
+        if (!attributesValues.includes(this.resourceUrl)) {
             return false;
         }
         return true;
     }
     open(): void {
-        if (!this.isElementBuilt()) {
+        if (!this.loaded || !this.isElementBuilt()) {
             this.buildElement();
+            return;
         }
         this.element.style.display = '';
     }
     close(): void {
+        this.abortDownloadingUnloadedNode();
+        this.spinner.hideSpinner();
         this.element.style.display = 'none';
         this.isSelected = false;
     }

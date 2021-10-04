@@ -7,12 +7,12 @@ import lightbox_types_styles from "../lightbox-types";
 
 const addStyles = (config: IConfig): HTMLStyleElement => {
     const styles = document.createElement('style');
-    styles.innerText = `
+    styles.innerText = `start:css
         ${lightbox_modal_styles(config)}
         ${lightbox_container_styles(config)}
         ${lightbox_types_styles(config)}
         ${lightbox_spinner_styles(config)}
-    `;
+    end:css`;
 
     return styles;
 }

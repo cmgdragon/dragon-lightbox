@@ -41,6 +41,16 @@ const lightbox_spinner_styles = (config: IConfig) => `
     background-color: white;
     animation: blink .5s ease-in infinite;
 }
+.lightbox-spinner.error > .lightbox-spinner-back > .back,
+.lightbox-spinner.error > .lightbox-spinner-front > .front {
+    background-color: red;
+    animation: none;
+}
+.lightbox-spinner.error > .lightbox-spinner-back > .back {
+    animation: none;
+    transform: scale(2);
+    opacity: .4;
+}
 @keyframes blink {
     0% {
         transform: scale(.4);
