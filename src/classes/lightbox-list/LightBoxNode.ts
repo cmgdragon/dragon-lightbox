@@ -10,11 +10,12 @@ import { ImageLightBox, VideoLightBox, EmbedLightBox } from "../lightbox-types";
 
 class LightBoxNode {
     private _lightbox: DragonLightBox;
+    id: number;
     private _prev: LightBoxNode | null;
     private _next: LightBoxNode | null;
 
-    constructor(id: number, element: HTMLDivElement, attributes: Attribute[], config: IConfig) {
-        element.setAttribute('data-dlightbox-id', String(id));
+    constructor(element: HTMLDivElement, attributes: Attribute[], config: IConfig) {
+        this.id = Number(element.getAttribute(ContainerAttributes.ID));
         this._lightbox = this.getLightBoxType(element, attributes, config);
         this._next = null;
         this._prev = null;

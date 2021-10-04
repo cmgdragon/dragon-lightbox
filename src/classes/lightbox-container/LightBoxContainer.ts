@@ -36,7 +36,7 @@ class LightBoxContainer {
         this.lightboxList = new LightBoxList(resources, this.config);
         this.selectedBox = this.lightboxList.head;
         this.selectedBox.lightbox.isSelected = true;
-        this._elements = resources.map(r => r.element);
+        this._elements = this.lightboxList.elements;
         this.events = this.buildCustomEvents({ detail: {
             config: this.config,
             count: this.elementCount,
@@ -105,16 +105,10 @@ class LightBoxContainer {
     }
 
     bindElements(elementsList: Element[], fireevent?: string) {
-        const ids = [...Array(this.elementCount).keys()];
         elementsList.forEach(element => {
-            if (element.getAttribute(ContainerAttributes.ID)) {
-                ids.splice(Number(element.getAttribute(ContainerAttributes.ID)), 1)
-            }
             element.addEventListener(fireevent ?? this.config.fireevent, this.nodeListener);
             if (fireevent == 'click') element.addEventListener('keydown', this.nodeListener)
-        });
-        elementsList.filter(e => !e.getAttribute(ContainerAttributes.ID)).forEach((element, i) => 
-            element.setAttribute(ContainerAttributes.ID, String(ids[i])));
+        })
     }
 
     removeNodeEventListeners() {
@@ -132,7 +126,7 @@ class LightBoxContainer {
             if ((event as KeyboardEvent).key != 'Enter') return;
         }
         const id = (event.target as Element).getAttribute(ContainerAttributes.ID);
-        const lightbox = this.getLightBoxByIndex(Number(id));
+        const lightbox = this.getLightBoxById(Number(id));
         this.openContainer(lightbox);
         document.getElementById('lightbox-container__hidden-tabindex')?.focus();
     }
@@ -239,8 +233,8 @@ class LightBoxContainer {
         }, 200);
     }
 
-    private getLightBoxByIndex(index: number): LightBoxNode {
-        return this.lightboxList.lookup(index)!;
+    private getLightBoxById(index: number): LightBoxNode {
+        return this.lightboxList.lookupById(index)!;
     }
 
     openContainer(box: LightBoxNode | number = this.lightboxList.head) {
@@ -250,7 +244,7 @@ class LightBoxContainer {
         this.spinner.element.classList.remove('error');
 
         const lightboxNode = Number.isInteger(box) ? 
-            this.getLightBoxByIndex(<number>box)
+            this.getLightBoxById(<number>box)
             : (box as LightBoxNode);
 
         if (!(lightboxNode.lightbox instanceof DragonLightBox)) {
