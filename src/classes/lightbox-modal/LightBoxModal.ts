@@ -4,6 +4,7 @@ import LightBoxContainer from "../lightbox-container/LightBoxContainer";
 class LightBoxModal {
     private modal: HTMLElement | null;
     private container: LightBoxContainer;
+    private lastTabPos: number = 0;
 
     constructor(container: LightBoxContainer) {
         this.modal = null;
@@ -27,6 +28,21 @@ class LightBoxModal {
         modal.classList.add('lightbox-modal');
 
         modal.prepend(addStyles(this.container.config));
+
+        if (this.container.elements.length == 1) return modal;
+
+        modal.addEventListener('touchstart', ({touches}) => this.lastTabPos = touches[0].screenX);
+        modal.addEventListener('touchmove', ({touches}) => 
+            this.container.mediaElement.style.transform = `translateX(${touches[0].screenX - this.lastTabPos}px)`);
+        modal.addEventListener('touchend', ({changedTouches}) => {
+            const endTabPos = changedTouches[0].screenX;
+            this.container.mediaElement.style.transform = ``;
+            if (Math.abs(endTabPos - this.lastTabPos) < 100) return;
+            if (endTabPos > this.lastTabPos)
+                this.container.prev();
+            else 
+                this.container.next();
+        })
 
         return modal;
     }

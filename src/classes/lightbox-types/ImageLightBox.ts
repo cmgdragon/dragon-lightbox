@@ -29,6 +29,7 @@ class ImageLightBox extends DragonLightBox {
         image.onload = () => {
             this.spinner.hideSpinner();
             this.loaded = true;
+            image.classList.add('lightbox-shadow');
             image.hidden = false;
         }
 

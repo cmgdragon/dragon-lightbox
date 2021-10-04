@@ -303,8 +303,8 @@ class LightBoxContainer {
         node.lightbox.close();
     }
 
-    private next(event: Event) {
-        event.stopPropagation();
+    next(event?: Event) {
+        event?.stopPropagation();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.tail) {
             this.openLightBox(this.lightboxList.head, true);
@@ -320,8 +320,8 @@ class LightBoxContainer {
         this.mediaElement?.dispatchEvent(this.events.get(customEvents.CHANGE) as CustomEvent);
     }
   
-    private prev(event: Event) {
-        event.stopPropagation();
+    prev(event?: Event) {
+        event?.stopPropagation();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.head) {
             this.openLightBox(this.lightboxList.tail, false);

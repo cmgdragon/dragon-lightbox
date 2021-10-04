@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-console.log("Cleaning minified CSS");
+console.log("Cleaning minified CSS...");
 fs.readFile("dist/index.js", function(err, buf) {
     if (err) console.log(err);
     var file = buf.toString();
