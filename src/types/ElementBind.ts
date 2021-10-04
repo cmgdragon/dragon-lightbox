@@ -1,2 +1,2 @@
-type ElementBind = { elements: Element[], fireEvent?: string };
+type ElementBind = { elements: Element[], fireevent?: string };
 export default ElementBind;

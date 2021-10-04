@@ -2,7 +2,7 @@ import IConfig from "../interfaces/IConfig";
 
 const defaultConfig: IConfig = {
     lazy: true,
-    fireEvent: 'click',
+    fireevent: 'click',
     autoplay: false,
     autoescale: true,
 }

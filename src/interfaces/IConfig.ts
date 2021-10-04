@@ -2,7 +2,7 @@ import Attribute from "../types/Attribute";
 
 interface IConfig {
     lazy: boolean,
-    fireEvent: string,
+    fireevent: string,
     autoplay: boolean,
     autoescale: number | boolean,
     type?: string,

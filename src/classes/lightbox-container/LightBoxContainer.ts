@@ -50,7 +50,7 @@ class LightBoxContainer {
         } })
 
         if (!nobind) {
-            const elementsBind = { elements: this.elements, fireEvent: config.fireEvent };
+            const elementsBind = { elements: this.elements, fireevent: config.fireevent };
             this.addNodeEventListeners([elementsBind]);
         }
     }
@@ -78,7 +78,7 @@ class LightBoxContainer {
                     throw new Error(`You must provide a set of ${this.elementCount} elements!`);
                 }
                 this.bindElements([elementsList] as Element[]);
-                this._bindedElements.push({ elements: [elementsList] as Element[], fireEvent: this.config.fireEvent })
+                this._bindedElements.push({ elements: [elementsList] as Element[], fireevent: this.config.fireevent })
                 return;
             } else {
                 elementsList = [elementsList as ElementBind];
@@ -90,28 +90,28 @@ class LightBoxContainer {
                     throw new Error(`You must provide a set of ${this.elementCount} elements!`);
                 }
                 this.bindElements([...elementsList].map(e => e as Element))
-                this._bindedElements.push({ elements: [...elementsList].map(e => e as Element), fireEvent: this.config.fireEvent })
+                this._bindedElements.push({ elements: [...elementsList].map(e => e as Element), fireevent: this.config.fireevent })
                 return;
             }
         }
-        for (let { elements, fireEvent } of elementsList as ElementBind[]) {
+        for (let { elements, fireevent } of elementsList as ElementBind[]) {
             if (!Array.isArray(elements)) {
                 elements = [elements];
             }
             
-            this.bindElements(elements, fireEvent)
-            this._bindedElements.push({ elements, fireEvent })
+            this.bindElements(elements, fireevent)
+            this._bindedElements.push({ elements, fireevent })
         } 
     }
 
-    bindElements(elementsList: Element[], fireEvent?: string) {
+    bindElements(elementsList: Element[], fireevent?: string) {
         const ids = [...Array(this.elementCount).keys()];
         elementsList.forEach(element => {
             if (element.getAttribute(ContainerAttributes.ID)) {
                 ids.splice(Number(element.getAttribute(ContainerAttributes.ID)), 1)
             }
-            element.addEventListener(fireEvent ?? this.config.fireEvent, this.nodeListener);
-            if (fireEvent == 'click') element.addEventListener('keydown', this.nodeListener)
+            element.addEventListener(fireevent ?? this.config.fireevent, this.nodeListener);
+            if (fireevent == 'click') element.addEventListener('keydown', this.nodeListener)
         });
         elementsList.filter(e => !e.getAttribute(ContainerAttributes.ID)).forEach((element, i) => 
             element.setAttribute(ContainerAttributes.ID, String(ids[i])));
@@ -119,10 +119,10 @@ class LightBoxContainer {
 
     removeNodeEventListeners() {
         this.destroyContainer();
-        for (const { elements, fireEvent } of this._bindedElements) {
+        for (const { elements, fireevent } of this._bindedElements) {
             elements.forEach(element => {
-                element.removeEventListener(fireEvent ?? this.config.fireEvent, this.nodeListener);
-                if (fireEvent == 'click') element.removeEventListener('keydown', this.nodeListener)
+                element.removeEventListener(fireevent ?? this.config.fireevent, this.nodeListener);
+                if (fireevent == 'click') element.removeEventListener('keydown', this.nodeListener)
             });
         }
     }
