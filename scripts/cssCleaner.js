@@ -16,11 +16,11 @@ fs.readFile("dist/index.js", function(err, buf) {
     fs.writeFile("docs/dragon-lightbox.js", final, (err) => {
         if (err) console.log(err);
     });
-    fs.writeFile("dist/index.js", final, (err) => {
+    fs.writeFile("dist/dragon-lightbox.js", final, (err) => {
         if (err) console.log(err);
         console.log("Done!");
 
-        var stats = fs.statSync("dist/index.js");
+        var stats = fs.statSync("dist/dragon-lightbox.js");
         console.log("Final bundle size: " + parseFloat(stats.size / 1024).toFixed(2) + " kb")
     });
 });
