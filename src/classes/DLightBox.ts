@@ -67,22 +67,23 @@ class DLightBox {
         const groupContainers = document.querySelectorAll(`[${ContainerAttributes.CONTAINER}]`);
         const soloContainers = document.querySelectorAll(`[${ContainerAttributes.INITIALIZER}]:not([${ContainerAttributes.CONTAINER}]>[${ContainerAttributes.INITIALIZER}])`);
 
-        for (const container of groupContainers) {
+        const initContainer = (container: Element, resources: IResourceElement[]) => {
             const config = this.getConfig(container);
             config.attributes = this.getAttributes(container);
             config.type = config.attributes.find(a => a.name === 'data-type')?.value;
-            const resources: IResourceElement[] = Array.from(container.children).map(element => ({ element, attributes: this.getAttributes(element) }))
             const lb = new LightBoxContainer(resources, config);
             DLightBox._instances.set(lb.id, DLightBox.createInstanceObject(lb));
         }
+
+        for (const container of groupContainers) {
+            const resources: IResourceElement[] = Array.from(container.children).map(element => ({ element, attributes: this.getAttributes(element) }))
+            initContainer(container, resources);
+        }
         
         for (const container of soloContainers) {
-            const config = this.getConfig(container);
-            config.attributes = this.getAttributes(container);
-            config.type = config.attributes.find(a => a.name === 'data-type')?.value;
             const resources: IResourceElement[] = [{ element: container, attributes: this.getAttributes(container) }]
-            const lb = new LightBoxContainer(resources, config);
-            DLightBox._instances.set(lb.id, DLightBox.createInstanceObject(lb));
+            initContainer(container, resources);
+
         }
     }
 
