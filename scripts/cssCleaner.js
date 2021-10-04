@@ -13,7 +13,7 @@ fs.readFile("dist/index.js", function(err, buf) {
         .replace(/{ /g, '{')
         .replace(/ }/g, '}');
     var final = filepart1+css+filepart2;
-    fs.writeFile("demo/index.js", final, (err) => {
+    fs.writeFile("docs/index.js", final, (err) => {
         if (err) console.log(err);
     });
     fs.writeFile("dist/index.js", final, (err) => {
