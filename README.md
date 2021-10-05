@@ -3,10 +3,10 @@ A lightweight, responsive and accessible lightbox library made in typescript
 
 ## Features
 - About 6 KB gzipped
-- Responsive and accessible
-- Vanilla JS bundle – Typescript source code
+- No third party libraries required
 - Support for Youtube, Vimeo and Daylimotion
 - Swipe effect on touch screens
+- Just one HTTP request
 - Custom API
 
 ## Demo
@@ -45,12 +45,16 @@ You can create a lightbox container adding the `data-dlightbox-container` attrib
 </div>
 ```
 
+### Identifying container items
+During the instance creation, each resource automatically receives a `data-id` attribute with an **integer** value. You can also preset this attribute that is used for open the lightbox programatically and [bind new html elements](#binding).
+
+
 ## Configuration
 This plugin allows to modify the configuration for lightbox containers and single lightboxes. These configurations are:
 
 
 
-|  Method |  Default |  Description  |
+|  Option |  Default |  Description  |
 | ------------ | ------------ | ------------ |
 | `lazy` | true | if true, the resources only download when the user access it. Otherwise, all resources download automatically on page load |
 | `fireevent` | "click" | it allows to define the event that will open the lightbox |
@@ -73,9 +77,16 @@ Define the configurations with the prefix `data-{config}`.
 - For the `attributes`, the plugin will take any HTML attribute for all resources and copy it to the corresponding lightbox resource.
 
 ## API
-A `dragonLightbox` object is exposed to the window object, with two main methods:
-- **create** -> allows the creation of lightbox objects programmatically
-- **instances** -> returns a map with the active lightbox instances
+A `dragonLightbox` object is exposed to the window object, with a mehotd and a property:
+
+| Method  |  Description |
+| ------------ | ------------ |
+|  `create` | allows the creation of lightbox objects programmatically  |
+
+| Property  |  Description |
+| ------------ | ------------ |
+|  `instances` | returns a map with the active lightbox instances  |
+
 
 ### Create an instance
 To create a new lightbox programatically, use `dragonLightbox.create`.
@@ -85,7 +96,7 @@ Use `dragonLightbox.create( resourceUrl )` , where `resourceUrl` is the url of t
 ```javascript
 const instance = dragonLightBox.create('path/to/your/resource.jpg')
 ```
-**This will return an instance object.**
+[**This will return an instance object.**](#the-instance-object)
 
 #### With config
 You can also pass a config object as a second param:
@@ -96,14 +107,17 @@ const instance = dragonLightBox.create('path/to/your/resource.jpg', { autoscale:
 #### Create a container
 If you want to create a lightbox container, use an array of resources, where each resource is also an array:
 ```javascript
-const resources = [  ['path/to/your/resourcw1.jpg'], ['path/to/your/resource2.mp4'] ]
+const resources = [  ['path/to/your/resource1.jpg'], ['path/to/your/resource2.mp4'] ]
 const instance = dragonLightBox.create(resources, { autoscale: false })
 ```
 
 #### Add attributes
 Now, if you want to add attributes to the resources, you must use an array of `[ recource, attributes ]`, where the attributes is an array of objects `{ name, value }`
-- name -> name of the attribute (e. g.: "aria-hidden")
-- value -> the value of the attribute
+
+|  Attribute | Description  |
+| ------------ | ------------ |
+| `name`  | the name of the attribute (e. g.: "aria-hidden")  |
+| `value`  | the value for the attribute  |
 
 ```javascript
 const attributes = [{ name: 'aria-hidden', value: true }, { name: 'any-other-attr', value: 'any' }]
@@ -126,7 +140,7 @@ An instance provides the following methods and properties:
 
 |  Property | Description   |
 | ------------ | ------------ |
-|  `elements` | provides a list with the elements that the plugin will follow for generating the lightbox. If the instance has been created with the `dragonLightBox.create`, those elements   |
+|  `elements` | provides a list with the elements that the plugin will follow for generating the lightbox. If the instance has been created with the `dragonLightBox.create`, those elements will need to be [binded](#binding) if you want yo access them through the HTML   |
 |  `bindings` | provides a list with all the instance bindings  |
 
 
@@ -147,7 +161,12 @@ The lightbox events provides a set of data that you can retrieve from the `event
 - `selectedBox` -> an object with information with the current lightbox resource element. It provides its `attributes`, the `resourceUrl` and the HTML `element` itself
 
 #### Binding
-If you need more, you can bind new HTML elements to the lightbox instances.
+To bind a lightbox resource means that you are linking the resource with an HTML element that will open that resource with a DOM event.
+
+When you are creating lightboxes declarativelly with the `data-dlightbox` attribute, those elements are being binded to the lightbox automatically.
+
+If you need more, you can bind new HTML elements to the lightbox instances, and assign a custom event that will open the lightbox.
+
 For it, use the `bind( elements )`
 
 ##### Bind without fireevent
@@ -158,6 +177,13 @@ const instance = dragonLightBox.instances.get(0);
 instance.bind( document.querySelector('#toBind') )
 ```
 
+| Considerations  |
+| ------------ |
+|  By default, a `click` event is registered. |
+|  When a `click` event is registered, automatically adds a `keydown (Enter)` event to te same HTML elements  |
+|  The number of elements to bind must be equal to the number of resources in the lightbox!  |
+
+
 ##### Bind with a fireevent
 Optionally, you can specify the event to listen. In that case you need to provide an object `{ elements, fireevent }` to the `bind()` method:
 
@@ -167,8 +193,25 @@ const instanceEvents = { elements: document.querySelector('#toBind'), fireevent:
 instance.bind( instanceEvents )
 ```
 
-- **The number of elements to bind must be equal to the number of resources in the lightbox!**
-- **If no fireevent is provided, it will add a `click` and `keydown (Enter)` events by default!**
+##### Using the `data-id` for binding
+The binding process will match those elements that have the same `data-id` with the `data-id` of the resources. If no matching `data-id` is provided to the HTML element, it will bind the elements in list order.
+
+```javascript
+//this lightbox resources with `data-id`  "1" and "2"...
+const resources = [
+	['resource1.jpg', { name: 'data-id', value: 1 }],
+	['resource2.jpg', { name: 'data-id', value: 2 }]
+] 
+const instance = dragonLightBox.create(resources);
+instance.bind( document.querySelectorAll('#binding > div') )
+```
+```html
+<!-- ...will bind the `data-id` of the following elements -->
+<div id="binding">
+	<div data-id="2">Bind2</div>
+	<div data-id="1">Bind1</div>
+</div>
+```
 
 ## Extend and build
 If you are interested of extending the project, clone it and execute

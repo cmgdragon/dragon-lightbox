@@ -194,10 +194,6 @@ class LightBoxContainer {
             this.container.prepend(prevArrow);
             this.container.append(this.mediaElement);
             this.container.append(nextArrow);
-            this.container.addEventListener('touchend', () => setTimeout(() => {
-                this.container!.querySelectorAll('[class*=arrow]')
-                .forEach(e => (e as HTMLElement).blur())
-            }, 0))
         } else {
             const lastFocusableElement = document.createElement('div');
             lastFocusableElement.tabIndex = 0;
@@ -299,6 +295,7 @@ class LightBoxContainer {
 
     next(event?: Event) {
         event?.stopPropagation();
+        (event?.target as HTMLElement).blur();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.tail) {
             this.openLightBox(this.lightboxList.head, true);
@@ -316,6 +313,7 @@ class LightBoxContainer {
   
     prev(event?: Event) {
         event?.stopPropagation();
+        (event?.target as HTMLElement).blur();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.head) {
             this.openLightBox(this.lightboxList.tail, false);
