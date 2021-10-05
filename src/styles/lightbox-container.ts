@@ -153,6 +153,10 @@ const lightbox_container_styles = (config: IConfig) =>`
         opacity: .8;
     }
 }
+@media (hover: none) {
+    .lightbox-container__next-arrow:hover,
+    .lightbox-container__prev-arrow:hover { opacity: .8 }
+}
 `;
 
 export default lightbox_container_styles;

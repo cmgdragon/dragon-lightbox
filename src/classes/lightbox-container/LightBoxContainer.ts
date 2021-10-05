@@ -194,6 +194,10 @@ class LightBoxContainer {
             this.container.prepend(prevArrow);
             this.container.append(this.mediaElement);
             this.container.append(nextArrow);
+            this.container.addEventListener('touchend', () => setTimeout(() => {
+                this.container!.querySelectorAll('[class*=arrow]')
+                .forEach(e => (e as HTMLElement).blur())
+            }, 0))
         } else {
             const lastFocusableElement = document.createElement('div');
             lastFocusableElement.tabIndex = 0;
