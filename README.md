@@ -1,4 +1,181 @@
-# Dragon LightBox
-//todo
+#Dragon Lightbox
+A lightweight, responsive and accessible lightbox library made in typescript
 
-Demo: [https://cmgdragon.github.io/dragon-lightbox/](https://cmgdragon.github.io/dragon-lightbox/)
+## Features
+- About 6 KB gzipped
+- Responsive and accessible
+- Vanilla JS bundle – Typescript source code
+- Support for Youtube, Vimeo and Daylimotion
+- Swipe effect on touch screens
+- Custom API
+
+##Demo
+https://cmgdragon.github.io/dragon-lightbox/ 
+
+## Installation
+Add the following script
+
+``<script src="https://cdn.jsdelivr.net/gh/cmgdragon/dragon-lightbox@latest/dist/dragon-lightbox.js"></script>``
+
+at the end of the `<body>` tag
+
+## Basic usage
+
+For getting started, add the `data-dlightbox` attribute to any resource you want to convert into a lightbox
+
+```html
+<img data-dlightbox  src="image.jpg" />
+```
+The plugin will automatically deduct what type of resource you are targeting based on the html tag or the resource extension.
+
+You can also specify the resource passing it as a value in the `data-dlightbox` attribute
+```html
+<any-tag data-dlightbox="resource.mp4"></any-tag>
+```
+
+## Containers
+You can create a lightbox container adding the `data-dlightbox-container` attribute to an element containig a list of resources
+
+```html
+<div data-dlightbox-container>
+<a href="image.jpg">Image1</a>
+<img src="image.jpg">
+<a data-dlightbox="https://www.youtube.com/watch?v=rHLwG3ioD4Y">Video</a>
+<img src="image.png">
+</div>
+```
+
+## Configuration
+This plugin allows to modify the configuration for lightbox containers and single lightboxes. These configurations are:
+
+| Option  | Default  | Description |
+| ------------ | ------------ |
+| `lazy` | true | if true, the resources only download when the user access it. Otherwise, all resources download automatically on page load |
+| `fireevent` | "click" | it allows to define the event that will open the lightbox |
+| `autoplay` | false | if true, videos and iframe videos will play automatically |
+| `autoscale` | true | if true, the resources will fill all the available space on the screen. If you specify a number, the resources will mantain a maximum with of that number in pixels. If false, the resources will keep their original size  |
+| `type` | undefined | You can explicitly define the type of elements of the lightbox. **TYPES:  `image`, `video`, `embed`**   (the "video" only refers to resources containing video extensions like .mp4.  Youtube videos are of type "embed") |
+| `attributes` | undefined | you can pass HTML attributes to the lightbox that will be applied to all its resources |
+
+### Adding cofiguration
+Define the configurations with the prefix `data-{config}`.
+
+```html
+<div data-dlightbox-container  data-autoscale="350" data-lazy="false">
+<a href="image.jpg">Image1</a>
+<img src="image.jpg" aria-label="Image 2">
+</div>
+```
+- The `data-type` configuration can work with the childs of a container, by now the others cannot.
+- For the `attributes`, the plugin will take any HTML attribute for all resources and copy it to the corresponding lightbox resource.
+
+## API
+A `dragonLightbox` object is exposed to the window object, with two main methods:
+- **create** -> allows the creation of lightbox objects programmatically
+- **instances** -> returns a map with the active lightbox instances
+
+### Create an instance
+To create a new lightbox programatically, use `dragonLightbox.create`.
+
+#### The easy way
+Use `dragonLightbox.create( resourceUrl )` , where `resourceUrl` is the url of the resource you want to show in a lightbox.
+```javascript
+const instance = dragonLightBox.create('path/to/your/resource.jpg')
+```
+**This will return an instance object.**
+
+#### With config
+You can also pass a config object as a second param:
+
+```javascript
+const instance = dragonLightBox.create('path/to/your/resource.jpg', { autoscale: false })
+```
+#### Create a container
+If you want to create a lightbox container, use an array of resources, where each resource is also an array:
+```javascript
+const resources = [  ['path/to/your/resourcw1.jpg'], ['path/to/your/resource2.mp4'] ]
+const instance = dragonLightBox.create(resources, { autoscale: false })
+```
+
+#### Add attributes
+Now, if you want to add attributes to the resources, you must use an array of `[ recource, attributes ]`, where the attributes is an array of objects `{ name, value }`
+- name -> name of the attribute (e. g.: "aria-hidden")
+- value -> the value of the attribute
+
+```javascript
+const attributes = [{ name: 'aria-hidden', value: true }, { name: 'any-other-attr', value: 'any' }]
+const resources = [  ['path/to/your/resource1.jpg', attributes] ] //one or more
+const instance = dragonLightBox.create(resources, { autoscale: false })
+```
+
+### The instance object
+You can get the instance by saving it in a variable when creating it with the `dragonLightBox.create` or accessing it with the `dragonLightBox.instances.get( id )`
+
+An instance provides the following methods and properties:
+
+|  Method | Description   |
+| ------------ | ------------ |
+|  `open( number? )` | open the lightbox by its `data-id`. If no id provided, opens the first one  |
+|  `close()` | close the lightbox  |
+|  `listen( listener , cb )` | adds a custom event listener and executes the callback provided [(more info)](#custom-events)  |
+|  `bind( elements )` | bind html elements to the instance [(more info)](#lightbox-binding) |
+|  `remove()` | removes the instance and all its bindings. It does not remove the html elements  |
+
+|  Property | Description   |
+| ------------ | ------------ |
+|  `elements` | provides a list with the elements that the plugin will follow for generating the lightbox. If the instance has been created with the `dragonLightBox.create`, those elements   |
+|  `bindings` | provides a list with all the instance bindings  |
+
+
+#### Custom events(#custom-events)
+We provided a set of custom events that will fire when certain actions are performed in the lightbox:
+
+|  Event | Description  |
+| ------------ | ------------ |
+| `dlightbox:open`  | fires when the lightbox has been opened  |
+| `dlightbox:open`  | fires when the lightbox has been closed  |
+| `dlightbox:changed`  | fires when the lightbox switch to the next or previous resource (only for containers) |
+
+The lightbox events provides a set of data that you can retrieve from the `event.detail` object:
+- `config` -> the lightbox configuration
+- `count` -> the number of resources of the lightbox
+- `id` -> id of the instance
+- `elements` -> elements that the lightbox will follow for for generating itself
+- `selectedBox` -> an object with information with the current lightbox resource element. It provides its `attributes`, the `resourceUrl` and the HTML `element` itself
+
+#### Binding(#lightbox-binding)
+If you need more, you can bind new HTML elements to the lightbox instances.
+For it, use the `bind( elements )`
+
+##### Bind without fireevent
+As a only parameter, you can pass a `querySelector` of the elements to be binded.
+
+```javascript
+const instance = dragonLightBox.instances.get(0);
+instance.bind( document.querySelector('#toBind') )
+```
+
+##### Bind with a fireevent
+Optionally, you can specify the event to listen. In that case you need to provide an object `{ elements, fireevent }` to the `bind()` method:
+
+```javascript
+const instance = dragonLightBox.instances.get(0);
+const instanceEvents = { elements: document.querySelector('#toBind'), fireevent: 'dblclick' }
+instance.bind( instanceEvents )
+```
+
+- **The number of elements to bind must be equal to the number of resources in the lightbox!**
+- **If no fireevent is provided, it will add a `click` and `keydown (Enter)` events by default!**
+
+## Extend and build
+If you are interested of extending the project, clone it and execute
+- `npm run dev`
+
+This will start the development environment, that uses the `index.html` file located in the root of the project
+
+For building the plugin for production, just hit
+- `npm run build`
+
+This will create an optimized file inside the `dist` folder
+
+- And do not hesitate to **fork** / **report issues** if you want to contribute!
