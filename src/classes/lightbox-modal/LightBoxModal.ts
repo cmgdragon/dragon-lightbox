@@ -30,7 +30,7 @@ class LightBoxModal {
         modal.prepend(addStyles(this.container.config));
 
         if (this.container.elements.length == 1) return modal;
-        
+
         modal.addEventListener('touchstart', ({touches}) => this.lastTabPos = touches[0].screenX);
         modal.addEventListener('touchmove', ({touches}) => 
             this.container.mediaElement.style.transform = `translateX(${touches[0].screenX - this.lastTabPos}px)`);
