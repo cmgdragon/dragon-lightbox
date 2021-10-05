@@ -19,7 +19,7 @@ class DLightBox {
     }
 
     static createInstanceObject = (lb: LightBoxContainer): ILightBoxContainerInstance => {
-        return {
+        const instance = {
             open: lb.openContainer.bind(lb),
             close: lb.destroyContainer.bind(lb),
             remove: () => DLightBox.removeInstanceObject(lb),
@@ -28,6 +28,9 @@ class DLightBox {
             elements: lb.elements,
             bindings: lb.bindings
         }
+        DLightBox._instances.set(DLightBox._instances.size == 0 ? 0 : 
+            [...DLightBox._instances.keys()][DLightBox._instances.size-1]+1, instance)
+        return instance;
     }
 
     static removeInstanceObject = (lb: LightBoxContainer): void => {
@@ -57,10 +60,8 @@ class DLightBox {
 
         const config = _config ? { ...defaultConfig, ..._config } : defaultConfig;
         const lb = new LightBoxContainer(resourceElements, config, true);
-        const instance = DLightBox.createInstanceObject(lb);
-        DLightBox._instances.set(lb.id, instance);
 
-        return instance;
+        return DLightBox.createInstanceObject(lb);
     }
 
     private autoinit(): void {
@@ -72,7 +73,7 @@ class DLightBox {
             config.attributes = this.getAttributes(container);
             config.type = config.attributes.find(a => a.name === 'data-type')?.value;
             const lb = new LightBoxContainer(resources, config);
-            DLightBox._instances.set(lb.id, DLightBox.createInstanceObject(lb));
+            DLightBox.createInstanceObject(lb);
         }
 
         for (const container of groupContainers) {

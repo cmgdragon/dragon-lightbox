@@ -1,6 +1,7 @@
 import ContainerAttributes from "../../constants/containerAttributes";
 import customEvents from "../../constants/customEvents";
 import IConfig from "../../interfaces/IConfig";
+import IEventDetail from "../../interfaces/IEventDetail";
 import IResourceElement from "../../interfaces/IResourceElement";
 import ElementBind from "../../types/ElementBind";
 import DragonLightBox from "../abstract/DragonLightBox";
@@ -47,11 +48,11 @@ class LightBoxContainer {
                 element: this.selectedBox.lightbox.element,
                 attributes: this.selectedBox.lightbox.attributes
             }
-        } })
+        } as IEventDetail })
 
         if (!nobind) {
             const elementsBind = { elements: this.elements, fireevent: config.fireevent };
-            this.addNodeEventListeners([elementsBind]);
+            this.addNodeEventListeners(elementsBind);
         }
     }
 
@@ -71,7 +72,7 @@ class LightBoxContainer {
         this.mediaElement.addEventListener(listener, cb)
     }
 
-    addNodeEventListeners(elementsList: (ElementBind[] | ElementBind) | (NodeList | Node)) {
+    addNodeEventListeners(elementsList: ElementBind | (NodeList | Node)) {
         if (!('length' in elementsList)) {
             if ( !elementsList.hasOwnProperty('elements')) {
                 if ([elementsList].length !== this.elementCount) {
@@ -80,12 +81,10 @@ class LightBoxContainer {
                 this.bindElements([elementsList] as Element[]);
                 this._bindedElements.push({ elements: [elementsList] as Element[], fireevent: this.config.fireevent })
                 return;
-            } else {
-                elementsList = [elementsList as ElementBind];
             }
         } else { //check if NodeList o ElementBind
 
-            if ( !elementsList[0].hasOwnProperty('elements')) {
+            if ( !elementsList.hasOwnProperty('elements')) {
                 if (elementsList.length !== this.elementCount) {
                     throw new Error(`You must provide a set of ${this.elementCount} elements!`);
                 }
@@ -94,14 +93,11 @@ class LightBoxContainer {
                 return;
             }
         }
-        for (let { elements, fireevent } of elementsList as ElementBind[]) {
-            if (!Array.isArray(elements)) {
-                elements = [elements];
-            }
-            
+            const { elements, fireevent } = elementsList as ElementBind;
+
             this.bindElements(elements, fireevent)
             this._bindedElements.push({ elements, fireevent })
-        } 
+
     }
 
     bindElements(elementsList: Element[], fireevent?: string) {
@@ -265,11 +261,11 @@ class LightBoxContainer {
         modal.append(this.container!);
         modal.append(this.container!);
         document.body.prepend(modal);
-        this.mediaElement?.dispatchEvent(this.events.get(customEvents.OPEN) as CustomEvent);
         
         this.selectedBox.lightbox.isSelected = false;
         this.selectedBox = lightboxNode;
         this.selectedBox.lightbox.isSelected = true;
+        this.mediaElement?.dispatchEvent(this.events.get(customEvents.OPEN) as CustomEvent);
     }
 
     private appendMediaElement(element: HTMLElement) {
