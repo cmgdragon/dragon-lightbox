@@ -1,4 +1,4 @@
-#Dragon Lightbox
+# Dragon Lightbox
 A lightweight, responsive and accessible lightbox library made in typescript
 
 ## Features
@@ -9,7 +9,7 @@ A lightweight, responsive and accessible lightbox library made in typescript
 - Swipe effect on touch screens
 - Custom API
 
-##Demo
+## Demo
 https://cmgdragon.github.io/dragon-lightbox/ 
 
 ## Installation
@@ -48,14 +48,17 @@ You can create a lightbox container adding the `data-dlightbox-container` attrib
 ## Configuration
 This plugin allows to modify the configuration for lightbox containers and single lightboxes. These configurations are:
 
-| Option  | Default  | Description |
-| ------------ | ------------ |
+
+
+|  Method |  Default |  Description  |
+| ------------ | ------------ | ------------ |
 | `lazy` | true | if true, the resources only download when the user access it. Otherwise, all resources download automatically on page load |
 | `fireevent` | "click" | it allows to define the event that will open the lightbox |
 | `autoplay` | false | if true, videos and iframe videos will play automatically |
 | `autoscale` | true | if true, the resources will fill all the available space on the screen. If you specify a number, the resources will mantain a maximum with of that number in pixels. If false, the resources will keep their original size  |
 | `type` | undefined | You can explicitly define the type of elements of the lightbox. **TYPES:  `image`, `video`, `embed`**   (the "video" only refers to resources containing video extensions like .mp4.  Youtube videos are of type "embed") |
 | `attributes` | undefined | you can pass HTML attributes to the lightbox that will be applied to all its resources |
+
 
 ### Adding cofiguration
 Define the configurations with the prefix `data-{config}`.
@@ -118,7 +121,7 @@ An instance provides the following methods and properties:
 |  `open( number? )` | open the lightbox by its `data-id`. If no id provided, opens the first one  |
 |  `close()` | close the lightbox  |
 |  `listen( listener , cb )` | adds a custom event listener and executes the callback provided [(more info)](#custom-events)  |
-|  `bind( elements )` | bind html elements to the instance [(more info)](#lightbox-binding) |
+|  `bind( elements )` | bind html elements to the instance [(more info)](#binding) |
 |  `remove()` | removes the instance and all its bindings. It does not remove the html elements  |
 
 |  Property | Description   |
@@ -127,7 +130,7 @@ An instance provides the following methods and properties:
 |  `bindings` | provides a list with all the instance bindings  |
 
 
-#### Custom events(#custom-events)
+#### Custom events
 We provided a set of custom events that will fire when certain actions are performed in the lightbox:
 
 |  Event | Description  |
@@ -143,7 +146,7 @@ The lightbox events provides a set of data that you can retrieve from the `event
 - `elements` -> elements that the lightbox will follow for for generating itself
 - `selectedBox` -> an object with information with the current lightbox resource element. It provides its `attributes`, the `resourceUrl` and the HTML `element` itself
 
-#### Binding(#lightbox-binding)
+#### Binding
 If you need more, you can bind new HTML elements to the lightbox instances.
 For it, use the `bind( elements )`
 
