@@ -6,6 +6,7 @@ import videoProviders from "../../constants/videoProviders";
 import IConfig from "../../interfaces/IConfig";
 import Attribute from "../../types/Attribute";
 import DragonLightBox from "../abstract/DragonLightBox";
+import getConfigByAttributes from "../functions/getConfigByAttributes";
 import { ImageLightBox, VideoLightBox, EmbedLightBox } from "../lightbox-types";
 
 class LightBoxNode {
@@ -16,7 +17,8 @@ class LightBoxNode {
 
     constructor(element: HTMLDivElement, attributes: Attribute[], config: IConfig) {
         this.id = Number(element.getAttribute(ContainerAttributes.ID));
-        this._lightbox = this.getLightBoxType(element, attributes, config);
+        const _config = { ...config, ...getConfigByAttributes(config, attributes) }
+        this._lightbox = this.getLightBoxType(element, attributes, _config);
         this._next = null;
         this._prev = null;
     }

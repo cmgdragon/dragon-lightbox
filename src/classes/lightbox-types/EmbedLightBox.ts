@@ -1,5 +1,6 @@
 import ContainerAttributes from "../../constants/containerAttributes";
 import IConfig from "../../interfaces/IConfig";
+import { autoscale_embed } from "../../styles/functions/getAutoscale";
 import Attribute from "../../types/Attribute";
 import DragonLightBox from "../abstract/DragonLightBox";
 import getVideoProviderUrl from "./functions/getVideoProviderUrl";
@@ -16,6 +17,7 @@ class EmbedLightBox extends DragonLightBox {
         this.element = iframe;
         this.spinner.showSpinner();
         this.setCommonAttributes();
+        iframe.setAttribute('style', autoscale_embed(this.config.autoscale));
 
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
         iframe.setAttribute('tabindex', '0');

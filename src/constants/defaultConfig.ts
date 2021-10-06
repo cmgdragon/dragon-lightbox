@@ -5,6 +5,8 @@ const defaultConfig: IConfig = {
     fireevent: 'click',
     autoplay: false,
     autoscale: false,
+    type: undefined,
+    attributes: undefined
 }
 
 export default defaultConfig;

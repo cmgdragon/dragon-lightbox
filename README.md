@@ -50,8 +50,7 @@ During the instance creation, each resource automatically receives a `data-id` a
 
 
 ## Configuration
-This plugin allows to modify the configuration for lightbox containers and single lightboxes. These configurations are:
-
+This plugin allows to modify the configuration for lightbox resources. These configurations are:
 
 
 |  Option |  Default |  Description  |
@@ -69,12 +68,15 @@ Define the configurations with the prefix `data-{config}`.
 
 ```html
 <div data-dlightbox-container  data-autoscale="350" data-lazy="false">
-<a href="image.jpg">Image1</a>
-<img src="image.jpg" aria-label="Image 2">
+	<a data-autoscale="true" href="image.jpg">Image1</a>
+	<img src="image.jpg" aria-label="Image 2">
 </div>
 ```
-- The `data-type` configuration can work with the childs of a container, by now the others cannot.
-- For the `attributes`, the plugin will take any HTML attribute for all resources and copy it to the corresponding lightbox resource.
+
+| Considerations  |
+| ------------ |
+|  The configurations set in the container will apply for all its resources, but you can override them |
+|  For the `attributes`, the plugin will take any HTML attribute for all resources and copy it to the corresponding lightbox resource  |
 
 ## API
 A `dragonLightbox` object is exposed to the window object, with a mehotd and a property:
@@ -124,6 +126,8 @@ const attributes = [{ name: 'aria-hidden', value: true }, { name: 'any-other-att
 const resources = [  ['path/to/your/resource1.jpg', attributes] ] //one or more
 const instance = dragonLightBox.create(resources, { autoscale: false })
 ```
+
+- **Set attributes for [overriding the configurations](#adding-cofiguration) in each resource!**
 
 ### The instance object
 You can get the instance by saving it in a variable when creating it with the `dragonLightBox.create` or accessing it with the `dragonLightBox.instances.get( id )`

@@ -1,5 +1,6 @@
 import ContainerAttributes from "../../constants/containerAttributes";
 import IConfig from "../../interfaces/IConfig";
+import { autoscale_video } from "../../styles/functions/getAutoscale";
 import Attribute from "../../types/Attribute";
 import DragonLightBox from "../abstract/DragonLightBox";
 
@@ -15,6 +16,7 @@ class VideoLightBox extends DragonLightBox {
         video.hidden = true;
         this.element = video;
         this.setCommonAttributes();
+        video.setAttribute('style', autoscale_video(this.config.autoscale));
 
         video.setAttribute(ContainerAttributes.CACHED, this.resourceUrl);
         video.controls = true;

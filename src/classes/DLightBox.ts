@@ -5,6 +5,7 @@ import ContainerAttributes from "../constants/containerAttributes";
 import ILightBoxContainerInstance from "../interfaces/ILightBoxContainerInstance";
 import IResourceElement from "../interfaces/IResourceElement";
 import Attribute from "../types/Attribute";
+import getConfigByAttributes from "./functions/getConfigByAttributes";
 
 class DLightBox {
 
@@ -69,9 +70,10 @@ class DLightBox {
         const soloContainers = document.querySelectorAll(`[${ContainerAttributes.INITIALIZER}]:not([${ContainerAttributes.CONTAINER}]>[${ContainerAttributes.INITIALIZER}])`);
 
         const initContainer = (container: Element, resources: IResourceElement[]) => {
-            const config = this.getConfig(container);
+            let config = this.getConfig(container);
             config.attributes = this.getAttributes(container);
-            config.type = config.attributes.find(a => a.name === 'data-type')?.value;
+            config = { ...config, ...this.getConfig(container, config.attributes) }
+            //config.type = config.attributes.find(a => a.name === 'data-type')?.value;
             const lb = new LightBoxContainer(resources, config);
             DLightBox.createInstanceObject(lb);
         }
@@ -88,26 +90,11 @@ class DLightBox {
         }
     }
 
-    private getConfig = (container: Element): IConfig => {
-        let config = defaultConfig;
-        const attributes = Object.values(container.attributes).map(attr => ({name: attr.name, value: attr.nodeValue}));
-        for (const { name, value } of attributes) {
-            const parsedName = name.replace(`${ContainerAttributes.DATA}-`, '')
-            if (value === '' || value == null) continue;
-
-            if (Object.keys(config).includes(parsedName)) {
-                let parsedValue: boolean | string | number = value;
-
-                //boolean check
-                parsedValue = value?.toLocaleLowerCase() === 'true' || value?.toLocaleLowerCase() === 'false' ?
-                                    value?.toLocaleLowerCase() === 'true' : value!;
-                //number check
-                parsedValue = /^[0-9]+$/.test(parsedValue as string) ? Number(parsedValue) : parsedValue;
-
-                config = { ...config, [parsedName]: parsedValue }
-            }
-        }
-        return config;
+    private getConfig = (container: Element, _attributes?: Attribute[]): IConfig => {
+        const config = defaultConfig;
+        const attributes = _attributes ? _attributes :
+        <Attribute[]> Object.values(container.attributes).map(attr => ({name: attr.name, value: attr.nodeValue}));
+        return getConfigByAttributes(config, attributes);
     }
 
     private getAttributes = (element: Element): Attribute[] => {

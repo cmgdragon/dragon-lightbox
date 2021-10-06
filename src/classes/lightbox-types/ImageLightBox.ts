@@ -1,4 +1,5 @@
 import IConfig from "../../interfaces/IConfig";
+import { autoscale_image } from "../../styles/functions/getAutoscale";
 import Attribute from "../../types/Attribute";
 import DragonLightBox from "../abstract/DragonLightBox";
 
@@ -13,6 +14,7 @@ class ImageLightBox extends DragonLightBox {
         image.hidden = true;
         this.element = image;
         this.setCommonAttributes();
+        image.setAttribute('style', autoscale_image(this.config.autoscale));
 
         image.classList.add('dlightbox-image');
         this.spinner.showSpinner();

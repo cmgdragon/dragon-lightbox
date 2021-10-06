@@ -17,7 +17,7 @@ class LightBoxList {
         let currentNode: LightBoxNode = this.head;
 
         for (let i = 1; i < lightboxlist.length; i++) {
-            currentNode.next = new LightBoxNode(this.elements[i] as HTMLDivElement, lightboxlist[0].attributes, config);
+            currentNode.next = new LightBoxNode(this.elements[i] as HTMLDivElement, lightboxlist[i].attributes, config);
             currentNode.prev = this.lookupByIndex(i - 2);
             currentNode = currentNode.next;
         }
