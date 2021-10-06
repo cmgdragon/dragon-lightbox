@@ -295,7 +295,6 @@ class LightBoxContainer {
 
     next(event?: Event) {
         event?.stopPropagation();
-        (event?.target as HTMLElement).blur();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.tail) {
             this.openLightBox(this.lightboxList.head, true);
@@ -313,7 +312,6 @@ class LightBoxContainer {
   
     prev(event?: Event) {
         event?.stopPropagation();
-        (event?.target as HTMLElement).blur();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.head) {
             this.openLightBox(this.lightboxList.tail, false);

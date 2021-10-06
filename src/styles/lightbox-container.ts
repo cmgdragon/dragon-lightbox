@@ -126,6 +126,11 @@ const lightbox_container_styles = (config: IConfig) =>`
     position: absolute;
     top: 0;
 }
+@media (hover: none) {
+    .lightbox-container > [class*=arrow] { opacity: .8 !important }
+    .lightbox-container__next-arrow:focus { transform: scale(.8) }
+    .lightbox-container__prev-arrow:focus { transform: scale(-.8) }
+}
 @media (max-width: ${mobile_breakpoint}px) {
     .lightbox-container__next-arrow,
     .lightbox-container__prev-arrow {
@@ -152,9 +157,6 @@ const lightbox_container_styles = (config: IConfig) =>`
         transform: scale(-.6) translateX(3rem);
         opacity: .8;
     }
-}
-@media (hover: none) {
-    .lightbox-container > [class*=arrow] { opacity: .8 }
 }
 `;
 
