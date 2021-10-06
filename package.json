@@ -11,7 +11,7 @@
     "parcel:build": "parcel build index.js --no-source-maps",
     "clear": "rimraf dist .parcel-cache",
     "css:clear": "node scripts/cssCleaner.js",
-    "build": "npm run clear && npm run parcel:build && npm run css:clear"
+    "build": "npm run clear && npm run parcel:build && npm run css:clear && rimraf dist/index.js"
   },
   "browserslist": [
     "defaults",
