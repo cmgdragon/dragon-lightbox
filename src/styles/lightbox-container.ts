@@ -153,6 +153,9 @@ const lightbox_container_styles = (config: IConfig) =>`
         opacity: .8;
     }
 }
+@media (hover: none) {
+    .lightbox-container > [class*=arrow] { opacity: .8 }
+}
 `;
 
 export default lightbox_container_styles;
