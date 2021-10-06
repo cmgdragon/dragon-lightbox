@@ -1,6 +1,21 @@
 # Dragon Lightbox
 A lightweight, responsive and accessible lightbox library made in typescript
 
+- [Features](#features)  
+- [Demo](#demo)
+- [Installation](#installation)
+- [Basic usage](#basic-usage)
+- [Containers](#containers)
+	- [Identifying container items](#identifying-container-items)
+- [Configuration](#configuration)
+	- [Adding cofiguration](#adding-cofiguration)
+- [API](#api)
+	- [Create an instance](#create-an-instance)
+	- [The instance object](#the-instance-object)
+	- [Custom events](#custom-events)
+	- [Binding](#binding)
+- [Extend and build](#extend-and-build)
+
 ## Features
 - About 6 KB gzipped
 - No third party libraries required
@@ -148,7 +163,7 @@ An instance provides the following methods and properties:
 |  `bindings` | provides a list with all the instance bindings  |
 
 
-#### Custom events
+### Custom events
 We provided a set of custom events that will fire when certain actions are performed in the lightbox:
 
 |  Event | Description  |
@@ -164,7 +179,7 @@ The lightbox events provides a set of data that you can retrieve from the `event
 - `elements` -> elements that the lightbox will follow for for generating itself
 - `selectedBox` -> an object with information with the current lightbox resource element. It provides its `attributes`, the `resourceUrl` and the HTML `element` itself
 
-#### Binding
+### Binding
 To bind a lightbox resource means that you are linking the resource with an HTML element that will open that resource with a DOM event.
 
 When you are creating lightboxes declarativelly with the `data-dlightbox` attribute, those elements are being binded to the lightbox automatically.
@@ -188,7 +203,7 @@ instance.bind( document.querySelector('#toBind') )
 |  The number of elements to bind must be equal to the number of resources in the lightbox!  |
 
 
-##### Bind with a fireevent
+#### Bind with a fireevent
 Optionally, you can specify the event to listen. In that case you need to provide an object `{ elements, fireevent }` to the `bind()` method:
 
 ```javascript
@@ -197,7 +212,7 @@ const instanceEvents = { elements: document.querySelector('#toBind'), fireevent:
 instance.bind( instanceEvents )
 ```
 
-##### Using the `data-id` for binding
+#### Using the `data-id` for binding
 The binding process will match those elements that have the same `data-id` with the `data-id` of the resources. If no matching `data-id` is provided to the HTML element, it will bind the elements in list order.
 
 ```javascript
