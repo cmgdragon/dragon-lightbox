@@ -19,8 +19,8 @@ const lightbox_types_styles = (config: IConfig) =>`
     max-width: unset;
 }
 @media (max-width: ${mobile_breakpoint}px) {
-    .dlightbox-video, .dlightbox-embed { width: 100% }
-    .dlightbox-embed { height: calc(100vw - 20vw) }
+    .dlightbox-video, .dlightbox-embed { width: 100% !important }
+    .dlightbox-embed { height: calc(100vw - 20vw) !important }
 }
 `;
 

@@ -17,7 +17,7 @@ class LightBoxModal {
         }
 
         this.modal = this.buildModal();
-        this.modal?.addEventListener('click', () => this.container.destroyContainer());
+        this.modal?.addEventListener('mousedown', () => this.container.destroyContainer());
         return this.modal;
     }
 

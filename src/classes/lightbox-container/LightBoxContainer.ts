@@ -184,8 +184,8 @@ class LightBoxContainer {
                 }
             });
 
-            nextArrow.addEventListener('click', event => this.next(event));
-            prevArrow.addEventListener('click', event => this.prev(event));
+            nextArrow.addEventListener('mousedown', event => this.next(event));
+            prevArrow.addEventListener('mousedown', event => this.prev(event));
             nextArrow.addEventListener('keydown', event => { if (event.key === 'Enter') this.next(event) });
             prevArrow.addEventListener('keydown', event => { if (event.key === 'Enter') this.prev(event) });
             this.modal.getModal().addEventListener('keydown', this.nextArrowModalEvent);
@@ -295,6 +295,7 @@ class LightBoxContainer {
 
     next(event?: Event) {
         event?.stopPropagation();
+        event?.preventDefault();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.tail) {
             this.openLightBox(this.lightboxList.head, true);
@@ -312,6 +313,7 @@ class LightBoxContainer {
   
     prev(event?: Event) {
         event?.stopPropagation();
+        event?.preventDefault();
         this.closeLightBox(this.selectedBox);
         if (this.selectedBox === this.lightboxList.head) {
             this.openLightBox(this.lightboxList.tail, false);
