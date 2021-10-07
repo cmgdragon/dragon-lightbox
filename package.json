@@ -1,8 +1,8 @@
 {
   "name": "dragon-lightbox",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
+  "version": "1.2.1",
+  "description": "A lightweight, responsive and accessible lightbox library made in typescript",
+  "main": "dist/dragon-lightbox.js",
   "targets": {
     "main": false
   },
@@ -18,15 +18,33 @@
     "not IE 11",
     "maintained node versions"
   ],
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "lightbox",
+    "responsive",
+    "accesible", 
+    "lightbox-gallery", 
+    "iframe", 
+    "video-gallery", 
+    "image-gallery",
+    "swipe"
+  ],
+  "author": "cmgdragon",
+  "license": "MIT",
   "devDependencies": {
-    "@parcel/compressor-brotli": "^2.0.0-nightly.2460",
-    "@parcel/compressor-gzip": "^2.0.0-nightly.2460",
     "parcel": "^2.0.0-rc.0",
     "rimraf": "3.0.2",
     "typescript": "^4.4.3"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmgdragon/dragon-lightbox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cmgdragon/dragon-lightbox/issues"
+  },
+  "homepage": "https://github.com/cmgdragon/dragon-lightbox#readme"
 }

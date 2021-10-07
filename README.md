@@ -1,4 +1,4 @@
-# Dragon Lightbox
+# Dragon LightBox
 A lightweight, responsive and accessible lightbox library made in typescript
 
 - [Features](#features)  
@@ -31,18 +31,38 @@ A lightweight, responsive and accessible lightbox library made in typescript
 https://cmgdragon.github.io/dragon-lightbox/ 
 
 ## Installation
+####CDN / Script
 Add the following script
 
 ``<script src="https://cdn.jsdelivr.net/gh/cmgdragon/dragon-lightbox@latest/dist/dragon-lightbox.js"></script>``
 
-at the end of the `<body>` tag
+at the end of the `<body>` tag of your html file.
+
+Or you can download the bundle file located in the `dist` folder of this repository and include it un your project!
+
+```html
+<script src="dragon-lightbox.js"></script>
+```
+
+####NPM
+Execute `npm install dragon-lightbox`
+
+and then include the javascript:
+
+```javascript
+require('dragon-lightbox')
+```
+Or, if using ES6 modules:
+```javascript
+import 'dragon-lightbox'
+```
 
 ## Basic usage
 
 For getting started, add the `data-dlightbox` attribute to any resource you want to convert into a lightbox
 
 ```html
-<img data-dlightbox  src="image.jpg" />
+<img data-dlightbox src="image.jpg" />
 ```
 The plugin will automatically deduct what type of resource you are targeting based on the html tag or the resource extension.
 
@@ -56,20 +76,19 @@ You can create a lightbox container adding the `data-dlightbox-container` attrib
 
 ```html
 <div data-dlightbox-container>
-<a href="image.jpg">Image1</a>
-<img src="image.jpg">
-<a data-dlightbox="https://www.youtube.com/watch?v=rHLwG3ioD4Y">Video</a>
-<img src="image.png">
+	<a href="image.jpg">Image1</a>
+	<img src="image.jpg">
+	<a data-dlightbox="https://www.youtube.com/watch?v=rHLwG3ioD4Y">Video</a>
+	<img src="image.png">
 </div>
 ```
 
 ### Identifying container items
-During the instance creation, each resource automatically receives a `data-id` attribute with an **integer** value. You can also preset this attribute that is used for open the lightbox programatically and [bind new html elements](#binding).
+During the instance creation, each resource automatically receives a `data-id` attribute with an **integer** value. You can also preset this attribute that is used for opening the lightbox programatically and [bind new html elements](#binding).
 
 
 ## Configuration
-This plugin allows to modify the configuration for lightbox resources. These configurations are:
-
+This plugin allows to modify the configuration for lightbox resources:
 
 |  Option |  Default |  Description  |
 | ------------ | ------------ | ------------ |
@@ -93,8 +112,8 @@ Define the configurations with the prefix `data-{config}`.
 
 | Considerations  |
 | ------------ |
-|  The configurations set in the container will apply for all its resources, but you can override them |
-|  For the `attributes`, the plugin will take any HTML attribute for all resources and copy it to the corresponding lightbox resource  |
+|  The configurations set in the container will apply for all its resources, but you can override each of them |
+|  For the `attributes`, the plugin will take any HTML attribute for all resources and copy them to the corresponding lightbox resource  |
 
 ## API
 A `dragonLightbox` object is exposed to the window object, with a mehotd and a property:
@@ -119,7 +138,7 @@ const instance = dragonLightBox.create('path/to/your/resource.jpg')
 [**This will return an instance object.**](#the-instance-object)
 
 #### With config
-You can also pass a config object as a second param:
+You can also pass configuration as a second param:
 
 ```javascript
 const instance = dragonLightBox.create('path/to/your/resource.jpg', { autoscale: false })
@@ -148,17 +167,17 @@ const instance = dragonLightBox.create(resources, { autoscale: false })
 - **Set attributes for [overriding the configurations](#adding-cofiguration) in each resource!**
 
 ### The instance object
-You can get the instance by saving it in a variable when creating it with the `dragonLightBox.create` or accessing it with the `dragonLightBox.instances.get( id )`
+You can get the instance by saving it in a variable when created with the `dragonLightBox.create` or accessing it with the `dragonLightBox.instances.get( id )`
 
-An instance provides the following methods and properties:
+The instance provides the following methods and properties:
 
 |  Method | Description   |
 | ------------ | ------------ |
-|  `open( number? )` | open the lightbox by its `data-id`. If no id provided, opens the first one  |
+|  `open( number? )` | open the lightbox by its `data-id`. If no id provided, open the first one  |
 |  `close()` | close the lightbox  |
-|  `listen( listener , cb )` | adds a custom event listener and executes the callback provided [(more info)](#custom-events)  |
+|  `listen( listener , cb )` | add a custom event listener and executes the callback provided [(more info)](#custom-events)  |
 |  `bind( elements )` | bind html elements to the instance [(more info)](#binding) |
-|  `remove()` | removes the instance and all its bindings. It does not remove the html elements  |
+|  `remove()` | remove the instance and all its bindings. It does not remove the html elements  |
 
 |  Property | Description   |
 | ------------ | ------------ |
@@ -167,20 +186,28 @@ An instance provides the following methods and properties:
 
 
 ### Custom events
-We provided a set of custom events that will fire when certain actions are performed in the lightbox:
+These are a set of custom events that will fire when certain actions are performed in the lightbox:
 
 |  Event | Description  |
 | ------------ | ------------ |
 | `dlightbox:open`  | fires when the lightbox has been opened  |
-| `dlightbox:open`  | fires when the lightbox has been closed  |
+| `dlightbox:close`  | fires when the lightbox has been closed  |
 | `dlightbox:changed`  | fires when the lightbox switch to the next or previous resource (only for containers) |
 
 The lightbox events provides a set of data that you can retrieve from the `event.detail` object:
-- `config` -> the lightbox configuration
-- `count` -> the number of resources of the lightbox
-- `id` -> id of the instance
-- `elements` -> elements that the lightbox will follow for for generating itself
-- `selectedBox` -> an object with information with the current lightbox resource element. It provides its `attributes`, the `resourceUrl` and the HTML `element` itself
+
+|  Detail | Description  |
+| ------------ | ------------ |
+| `config`  | the lightbox configuration  |
+| `count`  | the number of resources of the lightbox  |
+| `id`  |  id of the instance |
+| `elements`  | elements that the lightbox will follow for generating itself |
+| `selectedBox`  |  an object with information with the current lightbox resource element. It provides its `attributes`, the `resourceUrl`, the `element` and its own `config` |
+
+```javascript
+const instance = dragonLightBox.instances.get(0);
+instance.listen('dlightbox:open', ({details}) => console.log(details));
+```
 
 ### Binding
 To bind a lightbox resource means that you are linking the resource with an HTML element that will open that resource with a DOM event.
@@ -202,7 +229,7 @@ instance.bind( document.querySelector('#toBind') )
 | Considerations  |
 | ------------ |
 |  By default, a `click` event is registered. |
-|  When a `click` event is registered, automatically adds a `keydown (Enter)` event to te same HTML elements  |
+|  When a `click` event is registered, automatically adds a `keydown (Enter)` event to the same HTML elements  |
 |  The number of elements to bind must be equal to the number of resources in the lightbox!  |
 
 
@@ -239,11 +266,11 @@ instance.bind( document.querySelectorAll('#binding > div') )
 If you are interested of extending the project, clone it and execute
 - `npm run dev`
 
-This will start the development environment, that uses the `index.html` file located in the root of the project
+This will start the development environment, that uses the `index.html` file located in the root folder
 
 For building the plugin for production, just hit
 - `npm run build`
 
 This will create an optimized file inside the `dist` folder
 
-- And do not hesitate to **fork** / **report issues** if you want to contribute!
+Finally, do not hesitate to **fork** / **report issues** if you want to contribute!

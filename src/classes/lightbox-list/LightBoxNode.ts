@@ -14,8 +14,10 @@ class LightBoxNode {
     id: number;
     private _prev: LightBoxNode | null;
     private _next: LightBoxNode | null;
+    element: HTMLElement;
 
-    constructor(element: HTMLDivElement, attributes: Attribute[], config: IConfig) {
+    constructor(element: HTMLElement, attributes: Attribute[], config: IConfig) {
+        this.element = element;
         this.id = Number(element.getAttribute(ContainerAttributes.ID));
         const _config = { ...config, ...getConfigByAttributes(config, attributes) }
         this._lightbox = this.getLightBoxType(element, attributes, _config);

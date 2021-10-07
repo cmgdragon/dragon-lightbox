@@ -1,0 +1,12 @@
+node_modules/
+docs/
+.parcel-cache
+src/
+scripts/
+.gitignore
+.proxyrc.js
+.terserrc
+index.html
+index.js
+loader.html
+tsconfig.json
