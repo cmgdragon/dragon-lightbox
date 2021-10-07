@@ -31,7 +31,7 @@ A lightweight, responsive and accessible lightbox library made in typescript
 https://cmgdragon.github.io/dragon-lightbox/ 
 
 ## Installation
-#### CDN / Script
+####CDN / Script
 Add the following script
 
 ``<script src="https://cdn.jsdelivr.net/gh/cmgdragon/dragon-lightbox@latest/dist/dragon-lightbox.js"></script>``
@@ -42,6 +42,19 @@ Or you can download the bundle file located in the `dist` folder of this reposit
 
 ```html
 <script src="dragon-lightbox.js"></script>
+```
+
+####NPM
+Execute `npm install dragon-lightbox`
+
+and then include the javascript:
+
+```javascript
+require('dragon-lightbox')
+```
+Or, if using ES6 modules:
+```javascript
+import 'dragon-lightbox'
 ```
 
 ## Basic usage
