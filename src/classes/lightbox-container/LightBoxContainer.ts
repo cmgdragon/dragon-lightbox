@@ -45,7 +45,8 @@ class LightBoxContainer {
             elements: this.elements,
             selectedBox: { 
                 resourceUrl: this.selectedBox.lightbox.resourceUrl,
-                element: this.selectedBox.lightbox.element,
+                element: this.selectedBox.element,
+                config: this.selectedBox.lightbox.config,
                 attributes: this.selectedBox.lightbox.attributes
             }
         } as IEventDetail })

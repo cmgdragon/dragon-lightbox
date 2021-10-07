@@ -14,7 +14,7 @@ const lightbox_modal_styles = (config: IConfig) => `
     top: 0;
     left: 0;
     background-color: rgba(0,0,0,.87);
-    transition: opacity .2s ease-in;
+    transition: opacity .2s;
     transition-property: transform, opacity;
     opacity: 0;
 }

@@ -18,7 +18,7 @@ const lightbox_container_styles = (config: IConfig) =>`
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform .2s ease-in;
+    transition: transform .2s;
     transform: scale(.7);
 }
 .lightbox-container__media > * {

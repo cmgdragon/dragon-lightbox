@@ -8,7 +8,7 @@ interface IEventDetail {
     elements: Element[],
     selectedBox: {
         resourceUrl: string;
-        element: HTMLElement;
+        config: IConfig;
         attributes: Attribute[];
     }
 }
