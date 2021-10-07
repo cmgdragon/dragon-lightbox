@@ -6,7 +6,7 @@ interface IEventDetail {
     count: number,
     id: number,
     elements: Element[],
-    selectedBox: {
+    selectedBox: () => {
         resourceUrl: string;
         config: IConfig;
         attributes: Attribute[];

@@ -43,12 +43,12 @@ class LightBoxContainer {
             count: this.elementCount,
             id: this.id,
             elements: this.elements,
-            selectedBox: { 
+            selectedBox: () => ({ 
                 resourceUrl: this.selectedBox.lightbox.resourceUrl,
                 element: this.selectedBox.element,
                 config: this.selectedBox.lightbox.config,
                 attributes: this.selectedBox.lightbox.attributes
-            }
+            })
         } as IEventDetail })
 
         if (!nobind) {
