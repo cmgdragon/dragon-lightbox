@@ -206,7 +206,7 @@ The lightbox events provides a set of data that you can retrieve from the `event
 
 ```javascript
 const instance = dragonLightBox.instances.get(0);
-instance.listen('dlightbox:open', ({details}) => console.log(details));
+instance.listen('dlightbox:open', ({detail}) => console.log(detail));
 ```
 
 ### Binding
