@@ -192,7 +192,7 @@ These are a set of custom events that will fire when certain actions are perform
 | ------------ | ------------ |
 | `dlightbox:open`  | fires when the lightbox has been opened  |
 | `dlightbox:close`  | fires when the lightbox has been closed  |
-| `dlightbox:changed`  | fires when the lightbox switch to the next or previous resource (only for containers) |
+| `dlightbox:change`  | fires when the lightbox switch to the next or previous resource (only for containers) |
 
 The lightbox events provides a set of data that you can retrieve from the `event.detail` object:
 
