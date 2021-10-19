@@ -116,7 +116,7 @@ Define the configurations with the prefix `data-{config}`.
 |  For the `attributes`, the plugin will take any HTML attribute for all resources and copy them to the corresponding lightbox resource  |
 
 ## API
-A `dragonLightbox` object is exposed to the window object, with a mehotd and a property:
+A `dragonLightBox` object is exposed to the window object, with a mehotd and a property:
 
 | Method  |  Description |
 | ------------ | ------------ |
@@ -128,10 +128,10 @@ A `dragonLightbox` object is exposed to the window object, with a mehotd and a p
 
 
 ### Create an instance
-To create a new lightbox programatically, use `dragonLightbox.create`.
+To create a new lightbox programatically, use `dragonLightBox.create`.
 
 #### The easy way
-Use `dragonLightbox.create( resourceUrl )` , where `resourceUrl` is the url of the resource you want to show in a lightbox.
+Use `dragonLightBox.create( resourceUrl )` , where `resourceUrl` is the url of the resource you want to show in a lightbox.
 ```javascript
 const instance = dragonLightBox.create('path/to/your/resource.jpg')
 ```
@@ -141,13 +141,13 @@ const instance = dragonLightBox.create('path/to/your/resource.jpg')
 You can also pass configuration as a second param:
 
 ```javascript
-const instance = dragonLightBox.create('path/to/your/resource.jpg', { autoscale: false })
+const instance = dragonLightBox.create('path/to/your/resource.jpg', { autoscale: true })
 ```
 #### Create a container
 If you want to create a lightbox container, use an array of resources, where each resource is also an array:
 ```javascript
 const resources = [  ['path/to/your/resource1.jpg'], ['path/to/your/resource2.mp4'] ]
-const instance = dragonLightBox.create(resources, { autoscale: false })
+const instance = dragonLightBox.create(resources, { autoscale: true })
 ```
 
 #### Add attributes
@@ -161,7 +161,7 @@ Now, if you want to add attributes to the resources, you must use an array of `[
 ```javascript
 const attributes = [{ name: 'aria-hidden', value: true }, { name: 'any-other-attr', value: 'any' }]
 const resources = [  ['path/to/your/resource1.jpg', attributes] ] //one or more
-const instance = dragonLightBox.create(resources, { autoscale: false })
+const instance = dragonLightBox.create(resources, { autoscale: true })
 ```
 
 - **Set attributes for [overriding the configurations](#adding-cofiguration) in each resource!**
@@ -192,7 +192,7 @@ These are a set of custom events that will fire when certain actions are perform
 | ------------ | ------------ |
 | `dlightbox:open`  | fires when the lightbox has been opened  |
 | `dlightbox:close`  | fires when the lightbox has been closed  |
-| `dlightbox:changed`  | fires when the lightbox switch to the next or previous resource (only for containers) |
+| `dlightbox:change`  | fires when the lightbox switch to the next or previous resource (only for containers) |
 
 The lightbox events provides a set of data that you can retrieve from the `event.detail` object:
 
@@ -202,7 +202,7 @@ The lightbox events provides a set of data that you can retrieve from the `event
 | `count`  | the number of resources of the lightbox  |
 | `id`  |  id of the instance |
 | `elements`  | elements that the lightbox will follow for generating itself |
-| `selectedBox`  |  an object with information with the current lightbox resource element. It provides its `attributes`, the `resourceUrl`, the `element` and its own `config` |
+| `selectedBox()`  |  a function that returns an object with information with the current lightbox resource element. It provides its `attributes`, the `resourceUrl`, the `element` and its own `config` |
 
 ```javascript
 const instance = dragonLightBox.instances.get(0);
