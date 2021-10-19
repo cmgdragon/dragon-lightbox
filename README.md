@@ -38,7 +38,7 @@ Add the following script
 
 at the end of the `<body>` tag of your html file.
 
-Or you can download the bundle file located in the `dist` folder of this repository and include it un your project!
+Or you can download the bundle file located in the `dist` folder of this repository and include it in your project!
 
 ```html
 <script src="dragon-lightbox.js"></script>
@@ -95,7 +95,7 @@ This plugin allows to modify the configuration for lightbox resources:
 | `lazy` | true | if true, the resources only download when the user access it. Otherwise, the resource download automatically on page load |
 | `fireevent` | "click" | it allows to define the event that will open the lightbox |
 | `autoplay` | false | if true, videos and iframe videos will play automatically |
-| `autoscale` | false | if true, the resources will fill all the available space on the screen. If you specify a number, the resources will mantain a maximum with of that number in pixels. If false, the resources will keep their original size  |
+| `autoscale` | false | if true, the resources will fill all the available space on the screen. If you specify a number, the resources will mantain a maximum width of that number in pixels. If false, the resources will keep their original size  |
 | `type` | undefined | You can explicitly define the type of elements of the lightbox. **TYPES:  `image`, `video`, `embed`**   (the "video" only refers to resources containing video extensions like .mp4.  Youtube videos are of type "embed") |
 | `attributes` | undefined | you can pass HTML attributes to the lightbox that will be applied to all its resources |
 
