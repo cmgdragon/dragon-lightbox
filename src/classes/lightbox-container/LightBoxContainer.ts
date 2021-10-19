@@ -124,6 +124,7 @@ class LightBoxContainer {
         }
         const id = (event.target as Element).getAttribute(ContainerAttributes.ID);
         const lightbox = this.getLightBoxById(Number(id));
+        if ((event.target as Element).nodeType === 1) event.preventDefault();
         this.openContainer(lightbox);
         document.getElementById('lightbox-container__hidden-tabindex')?.focus();
     }
