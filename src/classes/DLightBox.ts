@@ -100,8 +100,11 @@ class DLightBox {
     private getAttributes = (element: Element): Attribute[] => {
         const _attributes: Attribute[]  = [];
         if (!element.attributes) return _attributes;
+
+        const omittedAttr = ['tabindex', 'class'];
+
         for (const { name, nodeValue } of Object.values(element.attributes)) {
-            if (name.toLowerCase().includes('tabindex')) continue;
+            if (omittedAttr.includes(name.toLowerCase())) continue;
             const parsedName = name.replace(`${ContainerAttributes.DATA}-`, '')
             _attributes.push({ name: parsedName, value: nodeValue ?? '' })
         }
