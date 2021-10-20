@@ -107,15 +107,16 @@ Define the configurations with the prefix `data-{config}`.
 
 ```html
 <div data-dlightbox-container  data-autoscale="350" data-lazy="false">
-	<a data-autoscale="true" href="image.jpg">Image1</a>
-	<img src="image.jpg" aria-label="Image 2">
+	<a data-autoscale="true" href="image1.jpg">Image1</a>
+	<img src="image2.jpg" alt="description" aria-label="Image 2">
+	<a href="image3.jpg" data-alt="description">Image1</a>
 </div>
 ```
 
 | Considerations  |
 | ------------ |
 |  The configurations set in the container will apply for all its resources, but you can override each of them |
-|  For the `attributes`, the plugin will take any HTML attribute for all resources and copy them to the corresponding lightbox resource  |
+|  For the `attributes`, the plugin will take any HTML attribute for all resources and copy them to the corresponding lightbox resource. It will also copy all `data-{attribute}` without the `data-`, so if you want to add, for instance, an "alt" attribute to an anchor element, use `data-alt`. If you want to add an "alt" to an image, simply keep its conventional `alt` |
 
 ## API
 A `dragonLightBox` object is exposed to the window object, with a mehotd and a property:
