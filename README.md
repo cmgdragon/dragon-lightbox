@@ -17,7 +17,7 @@ A lightweight, responsive and accessible lightbox library made in typescript
 - [Extend and build](#extend-and-build)
 
 ## Features
-- 7 KB gzipped
+- About 6 KB gzipped
 - No third party libraries required
 - Support for Youtube, Vimeo and Daylimotion
 - And any kind of embed content (iframes)
@@ -34,7 +34,9 @@ https://cmgdragon.github.io/dragon-lightbox/
 #### CDN / Script
 Add the following script
 
-``<script src="https://cdn.jsdelivr.net/gh/cmgdragon/dragon-lightbox@latest/dist/dragon-lightbox.js"></script>``
+```html
+<script src="https://cdn.jsdelivr.net/npm/dragon-lightbox@1.2.4/dist/dragon-lightbox.js"></script>
+```
 
 at the end of the `<body>` tag of your html file.
 
