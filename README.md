@@ -17,7 +17,7 @@ A lightweight, responsive and accessible lightbox library made in typescript
 - [Extend and build](#extend-and-build)
 
 ## Features
-- About 6 KB gzipped
+- 7 KB gzipped
 - No third party libraries required
 - Support for Youtube, Vimeo and Daylimotion
 - And any kind of embed content (iframes)

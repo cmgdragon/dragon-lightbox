@@ -158,6 +158,7 @@ class LightBoxContainer {
 
     private createContainer(): void {
         this.container = document.createElement('div');
+        document.body.classList.add('dlightbox-hidden');
         document.body.addEventListener('keydown', this.closeContainerBodyEvent);
         this.container.classList.add('lightbox-container');
         this.container.setAttribute('tabindex', '-1');
@@ -223,6 +224,7 @@ class LightBoxContainer {
             this.selectedBox.lightbox.close();
             this.container!.remove();
             this.modal.getModal().remove();
+            document.body.classList.remove('dlightbox-hidden');
             document.body.removeEventListener('keydown', this.closeContainerBodyEvent);
             this.modal.getModal().removeEventListener('keydown', this.nextArrowModalEvent);
             this.modal.getModal().removeEventListener('keydown', this.prevArrowModalEvent);

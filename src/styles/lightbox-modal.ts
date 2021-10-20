@@ -1,7 +1,7 @@
 import IConfig from "../interfaces/IConfig";
 
 const lightbox_modal_styles = (config: IConfig) => `
-.overflow-hidden {
+.dlightbox-hidden {
     overflow-y: hidden !important;
 }
 .lightbox-modal {

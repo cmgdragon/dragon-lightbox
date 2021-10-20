@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "npm run clear && parcel index.html --open",
     "parcel:build": "parcel build index.js --no-source-maps",
-    "clear": "rimraf dist .parcel-cache",
+    "clear": "rimraf dist .parcel-cache && rimraf docs/dragon-lightbox.js",
     "css:clear": "node scripts/cssCleaner.js",
     "build": "npm run clear && npm run parcel:build && npm run css:clear && rimraf dist/index.js"
   },
