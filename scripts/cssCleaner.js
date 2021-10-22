@@ -11,7 +11,8 @@ fs.readFile("dist/index.js", function(err, buf) {
         .replace(/ > /g, '>')
         .replace(/: /g, ':')
         .replace(/{ /g, '{')
-        .replace(/ }/g, '}');
+        .replace(/ }/g, '}')
+        .replace(/;}/g, '}');
     var final = filepart1+css+filepart2;
     fs.writeFile("docs/dragon-lightbox.js", final, (err) => {
         if (err) console.log(err);

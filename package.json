@@ -1,6 +1,6 @@
 {
   "name": "dragon-lightbox",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "A lightweight, responsive and accessible lightbox library made in typescript",
   "main": "dist/dragon-lightbox.js",
   "targets": {
