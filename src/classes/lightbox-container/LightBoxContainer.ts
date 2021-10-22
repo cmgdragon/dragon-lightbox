@@ -104,7 +104,7 @@ class LightBoxContainer {
     bindElements(elementsList: Element[], fireevent?: string) {
         elementsList.forEach(element => {
             element.addEventListener(fireevent ?? this.config.fireevent, this.nodeListener);
-            if (fireevent == 'click') element.addEventListener('keydown', this.nodeListener)
+            if (fireevent == 'click') element.addEventListener('keydown', this.nodeListener);
         })
     }
 
@@ -122,7 +122,9 @@ class LightBoxContainer {
         if (event.type == 'keydown') {
             if ((event as KeyboardEvent).key != 'Enter') return;
         }
-        const id = (event.target as Element).getAttribute(ContainerAttributes.ID);
+        const id = (event.composedPath() as Element[]).find(_el => 
+            this._bindedElements.map(eb => eb.elements).flat(1).find(el => el === _el))
+            ?.getAttribute(ContainerAttributes.ID) ?? '0';
         const lightbox = this.getLightBoxById(Number(id));
         if ((event.target as Element).nodeType === 1) event.preventDefault();
         this.openContainer(lightbox);
