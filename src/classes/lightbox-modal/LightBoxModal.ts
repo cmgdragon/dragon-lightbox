@@ -17,7 +17,11 @@ class LightBoxModal {
         }
 
         this.modal = this.buildModal();
-        this.modal?.addEventListener('mousedown', () => this.container.destroyContainer());
+        this.modal?.addEventListener('mousedown', e => {
+            const path = e.composedPath() as HTMLElement[];
+            if (!path.find((el, i) => i == 1 && el.classList?.contains('lightbox-container__media')))
+                this.container.destroyContainer();
+        });
         return this.modal;
     }
 

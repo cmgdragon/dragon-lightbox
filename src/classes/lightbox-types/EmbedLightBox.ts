@@ -27,13 +27,8 @@ class EmbedLightBox extends DragonLightBox {
         iframe.classList.add('dlightbox-embed');
         iframe.style.display = 'none';
         let iframeSrc = '';
-        
-        iframeSrc = getVideoProviderUrl(this.resourceUrl);
-        
-        if (iframeSrc!== '' && this.config.autoplay) {
-            iframeSrc += '?autoplay=1';
-        }
 
+        iframeSrc = getVideoProviderUrl(this.resourceUrl, this.config.autoplay);
         iframe.src = iframeSrc === '' ? this.resourceUrl : iframeSrc;
       
         iframe.onload = () => {
@@ -55,7 +50,7 @@ class EmbedLightBox extends DragonLightBox {
     }
 
     override open(): void {
-        if (this.config.autoplay) {
+        if (!this.isElementBuilt() && this.config.autoplay) {
             this.buildElement();
             return;
         } else {
@@ -80,6 +75,7 @@ class EmbedLightBox extends DragonLightBox {
         this.abortDownloadingUnloadedNode()
         this.spinner.hideSpinner();
         this.loaded = false;
+        this.element.remove();
         this.element.classList.remove('lightbox-shadow');
         this.element.style.display = 'none';
         this.isSelected = false;

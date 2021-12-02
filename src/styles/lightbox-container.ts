@@ -14,7 +14,7 @@ const lightbox_container_styles = (config: IConfig) =>`
     ${Number.isInteger(config.autoscale) ? `width: ${config.autoscale}px` : 'width: 80%'};
     max-height: 90vh;
     width: 100%;
-    max-width: 80%;
+    max-width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;

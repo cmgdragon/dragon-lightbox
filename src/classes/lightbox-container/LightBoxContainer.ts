@@ -102,7 +102,8 @@ class LightBoxContainer {
     }
 
     bindElements(elementsList: Element[], fireevent?: string) {
-        elementsList.forEach(element => {
+        this.lightboxList.setElementsId(elementsList)
+        .forEach(element => {
             element.addEventListener(fireevent ?? this.config.fireevent, this.nodeListener);
             if (fireevent == 'click') element.addEventListener('keydown', this.nodeListener);
         })

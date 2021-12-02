@@ -1,26 +1,30 @@
 import videoProviders from "../../../constants/videoProviders"
 
-const getVideoProviderUrl = (resourceUrl: string): string => {
+const getVideoProviderUrl = (resourceUrl: string, autoplay: boolean): string => {
 
-    const provider = videoProviders.find(provider => resourceUrl.includes(provider));
+    const provider = Object.values(videoProviders).find(provider => resourceUrl.includes(provider));
+    let [url, videoId] = ['', ''];
     
-    if (provider === 'youtube') {
-        const videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/watch?v=') + 9);
-        return `https://www.youtube.com/embed/${videoId}`;
+    switch (provider) {
+        case videoProviders.YOUTUBE:
+            videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/watch?v=') + 9);
+            url = `https://www.youtube.com/embed/${videoId.replace(`t=`, 'start=')}`;
+            break;
+        case videoProviders.DAILYMOTION:
+            videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/') + 1);
+            url = `https://www.dailymotion.com/embed/video/${videoId}`;
+            break;
+        case videoProviders.VIMEO:
+            videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/') + 1);
+            url = `https://player.vimeo.com/video/${videoId}`;
+            break;
+        default:
+            return url;
     }
 
-    if (provider === 'daylimotion') {
-        const videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/') + 1);
-        return `https://www.dailymotion.com/embed/video/${videoId}`;
-    }
-
-    if (provider === 'vimeo') {
-        const videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/') + 1);
-        return `https://player.vimeo.com/video/${videoId}`;
-    }
-
-    return '';
-
+    const qmark = url.includes('?') ? '' : '?';
+    url += autoplay ? `${qmark}&autoplay=1`: '';
+    return url;
 }
 
 export default getVideoProviderUrl;

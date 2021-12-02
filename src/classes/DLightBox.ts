@@ -6,6 +6,7 @@ import ILightBoxContainerInstance from "../interfaces/ILightBoxContainerInstance
 import IResourceElement from "../interfaces/IResourceElement";
 import Attribute from "../types/Attribute";
 import getConfigByAttributes from "./functions/getConfigByAttributes";
+import smartAttributes from "../constants/smartAttributes";
 
 class DLightBox {
 
@@ -40,29 +41,33 @@ class DLightBox {
     }
 
     create(resources: [string, Attribute[]?] | [string, Attribute[]?][], _config?: IConfig): ILightBoxContainerInstance {
-        if (typeof resources[0] !== 'string' && !Array.isArray(resources[0])) {
-            throw new Error("Invalid type");
-        }
 
-        const resourcesList = Array.isArray(resources[0]) || Array.isArray(resources) ? [resources] : [[resources]];
-        const resourceElements: IResourceElement[] = new Array<IResourceElement>();
-        for (const [url, attributes] of resourcesList) {
+        try {
+            
+            const resourcesList = Array.isArray(resources[0]) ? resources : [[resources]];
+            const resourceElements: IResourceElement[] = new Array<IResourceElement>();
 
-            const element = document.createElement('div');
-            const _attributes = <Attribute[]> attributes ?? null;
+            for (const [url, attributes] of resourcesList) {
 
-            if (_attributes && _attributes.find(a => a.name === ContainerAttributes.TYPE)) {
-                element.setAttribute(ContainerAttributes.TYPE, _attributes.find(a => a.name === ContainerAttributes.TYPE)?.value ?? '')
+                const element = document.createElement('div');
+                const _attributes = <Attribute[]> attributes ?? null;
+
+                if (_attributes && _attributes.find(a => a.name === ContainerAttributes.TYPE)) {
+                    element.setAttribute(ContainerAttributes.TYPE, _attributes.find(a => a.name === ContainerAttributes.TYPE)?.value ?? '')
+                }
+                element.setAttribute('data-dlightbox', String(url));
+                resourceElements.push({ element, attributes: _attributes });
+                
             }
-            element.setAttribute('data-dlightbox', String(url));
-            resourceElements.push({ element, attributes: _attributes });
 
-        }
+            const config = _config ? { ...defaultConfig, ..._config } : defaultConfig;
+            const lb = new LightBoxContainer(resourceElements, config, true);
+    
+            return DLightBox.createInstanceObject(lb);
 
-        const config = _config ? { ...defaultConfig, ..._config } : defaultConfig;
-        const lb = new LightBoxContainer(resourceElements, config, true);
-
-        return DLightBox.createInstanceObject(lb);
+        } catch (error) {
+            throw new Error(`Invalid dlightbox input: ${error.message}`);
+        }       
     }
 
     private autoinit(): void {
@@ -73,13 +78,15 @@ class DLightBox {
             let config = this.getConfig(container);
             config.attributes = this.getAttributes(container);
             config = { ...config, ...this.getConfig(container, config.attributes) }
-            //config.type = config.attributes.find(a => a.name === 'data-type')?.value;
+
             const lb = new LightBoxContainer(resources, config);
             DLightBox.createInstanceObject(lb);
         }
 
         for (const container of groupContainers) {
-            const resources: IResourceElement[] = Array.from(container.children).map(element => ({ element, attributes: this.getAttributes(element) }))
+            const _smartAttributes = smartAttributes.map(attr => `[${attr}]`);
+            const resources: IResourceElement[] = Array.from(container.querySelectorAll(`${_smartAttributes.join()}`))
+                .map(element => ({ element, attributes: this.getAttributes(element) }))
             initContainer(container, resources);
         }
         
@@ -91,10 +98,9 @@ class DLightBox {
     }
 
     private getConfig = (container: Element, _attributes?: Attribute[]): IConfig => {
-        const config = defaultConfig;
         const attributes = _attributes ? _attributes :
         <Attribute[]> Object.values(container.attributes).map(attr => ({name: attr.name, value: attr.nodeValue}));
-        return getConfigByAttributes(config, attributes);
+        return getConfigByAttributes(defaultConfig, attributes);
     }
 
     private getAttributes = (element: Element): Attribute[] => {

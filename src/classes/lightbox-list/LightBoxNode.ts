@@ -1,6 +1,7 @@
 import ContainerAttributes from "../../constants/containerAttributes";
 import ContainerTypes from "../../constants/containerTypes";
 import imageExtensions from "../../constants/imageExtensions";
+import smartAttributes from "../../constants/smartAttributes";
 import videoExtensions from "../../constants/videoExtensions";
 import videoProviders from "../../constants/videoProviders";
 import IConfig from "../../interfaces/IConfig";
@@ -19,8 +20,9 @@ class LightBoxNode {
     constructor(element: HTMLElement, attributes: Attribute[], config: IConfig) {
         this.element = element;
         this.id = Number(element.getAttribute(ContainerAttributes.ID));
-        const _config = { ...config, ...getConfigByAttributes(config, attributes) }
-        this._lightbox = this.getLightBoxType(element, attributes, _config);
+        const _attributes = attributes ? getConfigByAttributes(config, attributes) : null;
+        const cutomConfig = { ...config, ..._attributes  }
+        this._lightbox = this.getLightBoxType(element, attributes, cutomConfig);
         this._next = null;
         this._prev = null;
     }
@@ -46,16 +48,13 @@ class LightBoxNode {
     }
 
     private getLightBoxType(element: HTMLElement, attributes: Attribute[], config: IConfig): DragonLightBox {
-        const resource: string = (element.getAttribute("src") 
-                                || element.getAttribute("href")
-                                || element.getAttribute(ContainerAttributes.INITIALIZER)
-                            ) ?? '';
 
+        const resource: string = element.getAttribute(smartAttributes.filter(attr => element.getAttribute(attr))[0]) ?? '';
         const type: string | null = element.getAttribute(ContainerAttributes.TYPE) ??
             config.type ?? null;
 
         if (resource === '') {
-            throw new Error('An element resource from a data-dlightbox list is invalid');   
+            throw new Error(`Invalid resource. Please, use any of these tags: ${smartAttributes.join()}`);   
         }
 
         if (type === ContainerTypes.VIDEO || element.localName == 'video' || videoExtensions.some(mime => resource.indexOf(mime) !== -1)) {
@@ -66,7 +65,7 @@ class LightBoxNode {
             return new ImageLightBox(resource, attributes, config);
         }
 
-        if (type === ContainerTypes.EMBED || videoProviders.some(provider => resource.indexOf(provider) !== -1)) {
+        if (type === ContainerTypes.EMBED || Object.values(videoProviders).some(provider => resource.indexOf(provider) !== -1)) {
             return new EmbedLightBox(resource, attributes, config);
         }
 

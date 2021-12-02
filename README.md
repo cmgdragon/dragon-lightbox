@@ -35,7 +35,7 @@ https://cmgdragon.github.io/dragon-lightbox/
 Add the following script
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/dragon-lightbox@1.2.4/dist/dragon-lightbox.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dragon-lightbox@1.2.6/dist/dragon-lightbox.js"></script>
 ```
 
 at the end of the `<body>` tag of your html file.
@@ -97,7 +97,7 @@ This plugin allows to modify the configuration for lightbox resources:
 | `lazy` | true | if true, the resources only download when the user access it. Otherwise, the resource download automatically on page load |
 | `fireevent` | "click" | it allows to define the event that will open the lightbox |
 | `autoplay` | false | if true, videos and iframe videos will play automatically |
-| `autoscale` | false | if true, the resources will fill all the available space on the screen. If you specify a number, the resources will mantain a maximum width of that number in pixels. If false, the resources will keep their original size  |
+| `autoscale` | true | if true, the resources will fill all the available space on the screen. If you specify a number, the resources will mantain a maximum width of that number in pixels. If false, the resources will keep their original size  |
 | `type` | undefined | You can explicitly define the type of elements of the lightbox. **TYPES:  `image`, `video`, `embed`**   (the "video" only refers to resources containing video extensions like .mp4.  Youtube videos are of type "embed") |
 | `attributes` | undefined | you can pass HTML attributes to the lightbox that will be applied to all its resources |
 
@@ -107,7 +107,7 @@ Define the configurations with the prefix `data-{config}`.
 
 ```html
 <div data-dlightbox-container  data-autoscale="350" data-lazy="false">
-	<a data-autoscale="true" href="image1.jpg">Image1</a>
+	<a data-autoscale data-lazy href="image1.jpg">Image1</a>
 	<img src="image2.jpg" alt="description" aria-label="Image 2">
 	<a href="image3.jpg" data-alt="description">Image1</a>
 </div>
@@ -115,7 +115,7 @@ Define the configurations with the prefix `data-{config}`.
 
 | Considerations  |
 | ------------ |
-|  The configurations set in the container will apply for all its resources, but you can override each of them |
+|  The configurations set in the container will apply for all its resources, but you can override each of them (as we do with the Image1) |
 |  For the `attributes`, the plugin will take any HTML attribute for all resources and copy them to the corresponding lightbox resource. It will also copy all `data-{attribute}` without the `data-`, so if you want to add, for instance, an "alt" attribute to an anchor element, use `data-alt`. If you want to add an "alt" to an image, simply keep its conventional `alt` |
 
 ## API
@@ -144,13 +144,13 @@ const instance = dragonLightBox.create('path/to/your/resource.jpg')
 You can also pass configuration as a second param:
 
 ```javascript
-const instance = dragonLightBox.create('path/to/your/resource.jpg', { autoscale: true })
+const instance = dragonLightBox.create('path/to/your/resource.jpg', { lazy: false })
 ```
 #### Create a container
 If you want to create a lightbox container, use an array of resources, where each resource is also an array:
 ```javascript
 const resources = [  ['path/to/your/resource1.jpg'], ['path/to/your/resource2.mp4'] ]
-const instance = dragonLightBox.create(resources, { autoscale: true })
+const instance = dragonLightBox.create(resources, { autoplay: true })
 ```
 
 #### Add attributes
@@ -164,7 +164,7 @@ Now, if you want to add attributes to the resources, you must use an array of `[
 ```javascript
 const attributes = [{ name: 'aria-hidden', value: true }, { name: 'any-other-attr', value: 'any' }]
 const resources = [  ['path/to/your/resource1.jpg', attributes] ] //one or more
-const instance = dragonLightBox.create(resources, { autoscale: true })
+const instance = dragonLightBox.create(resources, { autoscale: false })
 ```
 
 - **Set attributes for [overriding the configurations](#adding-cofiguration) in each resource!**
