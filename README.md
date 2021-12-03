@@ -5,6 +5,7 @@ A lightweight, responsive and accessible lightbox library made in typescript
 - [Demo](#demo)
 - [Installation](#installation)
 - [Basic usage](#basic-usage)
+	- [Embed videos](#embed-videos)
 - [Containers](#containers)
 	- [Identifying container items](#identifying-container-items)
 - [Configuration](#configuration)
@@ -17,7 +18,7 @@ A lightweight, responsive and accessible lightbox library made in typescript
 - [Extend and build](#extend-and-build)
 
 ## Features
-- About 6 KB gzipped
+- About 7 KB gzipped
 - No third party libraries required
 - Support for Youtube, Vimeo and Daylimotion
 - And any kind of embed content (iframes)
@@ -72,6 +73,20 @@ You can also specify the resource passing it as a value in the `data-dlightbox` 
 ```html
 <any-tag data-dlightbox="resource.mp4"></any-tag>
 ```
+
+### Embed videos
+
+For embedding videos from hird-party platforms, just use the entire url to that video.
+
+Supported platforms are Youtube, Dailymotion and Vimeo.
+
+The url also supports the "start time" parameter. Each provider implements it differently.
+
+Some examples right below
+
+Youtube:  https://www.youtube.com/watch?v=XxXxXXX **&t=100**
+Dailymotion: https://www.dailymotion.com/video/xxXXxXX **?start=20**
+Vimeo: https://vimeo.com/00000000 **#t=30**
 
 ## Containers
 You can create a lightbox container adding the `data-dlightbox-container` attribute to an element containig a list of resources

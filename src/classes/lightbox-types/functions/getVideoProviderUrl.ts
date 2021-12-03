@@ -7,15 +7,18 @@ const getVideoProviderUrl = (resourceUrl: string, autoplay: boolean): string => 
     
     switch (provider) {
         case videoProviders.YOUTUBE:
-            videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/watch?v=') + 9);
-            url = `https://www.youtube.com/embed/${videoId.replace(`t=`, 'start=')}`;
+            const videoIdParams = resourceUrl.substr(resourceUrl.lastIndexOf('watch?v=') + 8)
+            videoId = videoIdParams.substr(0, videoIdParams.includes('?') ? videoIdParams.indexOf('?') : videoIdParams.includes('&') ? videoIdParams.indexOf('&') : undefined);
+            const params = videoIdParams.substr(videoIdParams.indexOf(videoIdParams.includes('?') ? '?' : '&'))
+                .replace('s', '').replace(`&t=`, '?start=').replace(`?t=`, '?start=')
+            url = `https://www.youtube.com/embed/${videoId}${params.length > 1 ? params:''}`;
             break;
         case videoProviders.DAILYMOTION:
-            videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/') + 1);
+            videoId = resourceUrl.substr(resourceUrl.lastIndexOf('/') + 1);
             url = `https://www.dailymotion.com/embed/video/${videoId}`;
             break;
         case videoProviders.VIMEO:
-            videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/') + 1);
+            videoId = resourceUrl.substr(resourceUrl.lastIndexOf('/') + 1);
             url = `https://player.vimeo.com/video/${videoId}`;
             break;
         default:
