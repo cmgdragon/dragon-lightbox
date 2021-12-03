@@ -85,7 +85,9 @@ The url also supports the "start time" parameter. Each provider implements it di
 Some examples right below
 
 Youtube:  https://www.youtube.com/watch?v=XxXxXXX **&t=100**
+
 Dailymotion: https://www.dailymotion.com/video/xxXXxXX **?start=20**
+
 Vimeo: https://vimeo.com/00000000 **#t=30**
 
 ## Containers
