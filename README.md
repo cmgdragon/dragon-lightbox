@@ -102,7 +102,7 @@ You can create a lightbox container adding the `data-dlightbox-container` attrib
 </div>
 ```
 
-It also work recursively, that is, resources don't require to be direct childs of the container.
+- It also works recursively, that is, resources don't require to be direct childs of the container.
 
 ### Identifying container items
 During the instance creation, each resource automatically receives a `data-id` attribute with an **integer** value. You can also preset this attribute that is used for opening the lightbox programatically and [bind new html elements](#binding).
