@@ -5,6 +5,7 @@ const defaultConfig: IConfig = {
     fireevent: 'click',
     autoplay: false,
     autoscale: true,
+    showscroll: false,
     type: undefined,
     attributes: undefined
 }

@@ -2,7 +2,7 @@ import IConfig from "../interfaces/IConfig";
 
 const lightbox_modal_styles = (config: IConfig) => `
 .dlightbox-hidden {
-    overflow-y: hidden !important;
+    overflow: hidden !important;
 }
 .lightbox-modal {
     display: flex;
@@ -10,7 +10,7 @@ const lightbox_modal_styles = (config: IConfig) => `
     z-index: 1000;
     width: 100%;
     height: 100vh;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background-color: rgba(0,0,0,.87);

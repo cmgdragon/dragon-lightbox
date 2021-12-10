@@ -161,7 +161,7 @@ class LightBoxContainer {
 
     private createContainer(): void {
         this.container = document.createElement('div');
-        document.body.classList.add('dlightbox-hidden');
+        this.config.showscroll ? null : document.body.classList.add('dlightbox-hidden');
         document.body.addEventListener('keydown', this.closeContainerBodyEvent);
         this.container.classList.add('lightbox-container');
         this.container.setAttribute('tabindex', '-1');

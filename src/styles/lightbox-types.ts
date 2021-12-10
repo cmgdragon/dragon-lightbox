@@ -1,6 +1,5 @@
 import IConfig from "../interfaces/IConfig";
 import mobile_breakpoint from "../constants/mobile_breakpoint";
-import * as autoscale from "./functions/getAutoscale";
 
 const lightbox_types_styles = (config: IConfig) =>`
 .dlightbox-image {

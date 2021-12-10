@@ -5,6 +5,7 @@ interface IConfig {
     fireevent: string,
     autoplay: boolean,
     autoscale: number | boolean,
+    showscroll: boolean,
     type?: string,
     attributes?: Attribute[]
 }

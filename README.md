@@ -76,7 +76,7 @@ You can also specify the resource passing it as a value in the `data-dlightbox` 
 
 ### Embed videos
 
-For embedding videos from hird-party platforms, just use the entire url to that video.
+For embedding videos from third-party platforms, just use the absolute url to that video.
 
 Supported platforms are Youtube, Dailymotion and Vimeo.
 
@@ -117,6 +117,7 @@ This plugin allows to modify the configuration for lightbox resources:
 | `fireevent` | "click" | it allows to define the event that will open the lightbox |
 | `autoplay` | false | if true, videos and iframe videos will play automatically |
 | `autoscale` | true | if true, the resources will fill all the available space on the screen. If you specify a number, the resources will mantain a maximum width of that number in pixels. If false, the resources will keep their original size  |
+| `showscroll` | false | if true, will show the window vertical scrollbar. By default, it is hidden. Only applies once per instance |
 | `type` | undefined | You can explicitly define the type of elements of the lightbox. **TYPES:  `image`, `video`, `embed`**   (the "video" only refers to resources containing video extensions like .mp4.  Youtube videos are of type "embed") |
 | `attributes` | undefined | you can pass HTML attributes to the lightbox that will be applied to all its resources |
 
