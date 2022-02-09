@@ -14,14 +14,16 @@ fs.readFile("dist/index.js", function(err, buf) {
         .replace(/ }/g, '}')
         .replace(/;}/g, '}');
     var final = filepart1+css+filepart2;
-    fs.writeFile("docs/dragon-lightbox.js", final, (err) => {
+    console.log("Done!");
+    console.log("Generating minified bundles...");
+    fs.writeFile("docs/dragon-lightbox.min.js", final, (err) => {
         if (err) console.log(err);
     });
-    fs.writeFile("dist/dragon-lightbox.js", final, (err) => {
+    fs.writeFile("dist/dragon-lightbox.min.js", final, (err) => {
         if (err) console.log(err);
         console.log("Done!");
 
-        var stats = fs.statSync("dist/dragon-lightbox.js");
+        var stats = fs.statSync("dist/dragon-lightbox.min.js");
         console.log("Final bundle size: " + parseFloat(stats.size / 1024).toFixed(2) + " kb")
     });
 });

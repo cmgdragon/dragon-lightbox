@@ -7,6 +7,7 @@ A lightweight, responsive and accessible lightbox library made in typescript
 - [Basic usage](#basic-usage)
 	- [Embed videos](#embed-videos)
 - [Containers](#containers)
+	- [Ignoring container items](#ignoring-container-items)
 	- [Identifying container items](#identifying-container-items)
 - [Configuration](#configuration)
 	- [Adding cofiguration](#adding-cofiguration)
@@ -36,7 +37,7 @@ https://cmgdragon.github.io/dragon-lightbox/
 Add the following script
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/dragon-lightbox@1.3.0/dist/dragon-lightbox.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dragon-lightbox@1.3.0/dist/dragon-lightbox.min.js"></script>
 ```
 
 at the end of the `<body>` tag of your html file.
@@ -44,7 +45,7 @@ at the end of the `<body>` tag of your html file.
 Or you can download the bundle file located in the `dist` folder of this repository and include it in your project!
 
 ```html
-<script src="dragon-lightbox.js"></script>
+<script src="dragon-lightbox.min.js"></script>
 ```
 
 #### NPM
@@ -102,7 +103,10 @@ You can create a lightbox container adding the `data-dlightbox-container` attrib
 </div>
 ```
 
-- It also works recursively, that is, resources don't require to be direct childs of the container.
+- It also **works recursively**, that is, resources don't require to be direct childs of the container.
+
+### Ignoring container items
+You can prevent certain element inside of a container to become part of the lightbox using the `data-ignore` attribute.
 
 ### Identifying container items
 During the instance creation, each resource automatically receives a `data-id` attribute with an **integer** value. You can also preset this attribute that is used for opening the lightbox programatically and [bind new html elements](#binding).
@@ -139,7 +143,7 @@ Define the configurations with the prefix `data-{config}`.
 |  For the `attributes`, the plugin will take any HTML attribute for all resources and copy them to the corresponding lightbox resource. It will also copy all `data-{attribute}` without the `data-`, so if you want to add, for instance, an "alt" attribute to an anchor element, use `data-alt`. If you want to add an "alt" to an image, simply keep its conventional `alt` |
 
 ## API
-A `dragonLightBox` object is exposed to the window object, with a mehotd and a property:
+A `dragonLightBox` object is exposed to the window object, with a method and a property:
 
 | Method  |  Description |
 | ------------ | ------------ |
