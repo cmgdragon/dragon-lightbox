@@ -37,7 +37,7 @@ https://cmgdragon.github.io/dragon-lightbox/
 Add the following script
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/dragon-lightbox@1.3.0/dist/dragon-lightbox.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dragon-lightbox@1.3.1/dist/dragon-lightbox.min.js"></script>
 ```
 
 at the end of the `<body>` tag of your html file.
