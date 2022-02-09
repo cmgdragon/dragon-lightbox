@@ -7,18 +7,26 @@ const getVideoProviderUrl = (resourceUrl: string, autoplay: boolean): string => 
     
     switch (provider) {
         case videoProviders.YOUTUBE:
-            const videoIdParams = resourceUrl.substr(resourceUrl.lastIndexOf('watch?v=') + 8)
-            videoId = videoIdParams.substr(0, videoIdParams.includes('?') ? videoIdParams.indexOf('?') : videoIdParams.includes('&') ? videoIdParams.indexOf('&') : undefined);
-            const params = videoIdParams.substr(videoIdParams.indexOf(videoIdParams.includes('?') ? '?' : '&'))
-                .replace('s', '').replace(`&t=`, '?start=').replace(`?t=`, '?start=')
-            url = `https://www.youtube.com/embed/${videoId}${params.length > 1 ? params:''}`;
+            url = resourceUrl;
+            if (!resourceUrl.includes('/embed')) {
+                const videoIdParams = resourceUrl.substring(resourceUrl.lastIndexOf('watch?v=') + 8)
+                videoId = videoIdParams.substring(0, videoIdParams.includes('?') ? videoIdParams.indexOf('?') : videoIdParams.includes('&') ? videoIdParams.indexOf('&') : undefined);
+                const validParams = ['t', 'start']
+                let params: string | string[] = videoIdParams.replace(videoId, '').replace('?', '').split('&').filter(p => validParams.includes(p.split('=')[0]));
+                params = params.map(p => {
+                    let newp = p.split('=')
+                    return `${newp[0]}=${newp[1].replace('s', '')}`
+                }).join()
+                params = params.replace(`t=`, 'start=')
+                url = `https://www.youtube.com/embed/${videoId}${params.length > 1 ? `?${params}` : ''}`;
+            }
             break;
         case videoProviders.DAILYMOTION:
-            videoId = resourceUrl.substr(resourceUrl.lastIndexOf('/') + 1);
+            videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/') + 1);
             url = `https://www.dailymotion.com/embed/video/${videoId}`;
             break;
         case videoProviders.VIMEO:
-            videoId = resourceUrl.substr(resourceUrl.lastIndexOf('/') + 1);
+            videoId = resourceUrl.substring(resourceUrl.lastIndexOf('/') + 1);
             url = `https://player.vimeo.com/video/${videoId}`;
             break;
         default:
