@@ -72,7 +72,7 @@ class DLightBox {
 
     private autoinit(): void {
         const groupContainers = document.querySelectorAll(`[${ContainerAttributes.CONTAINER}]`);
-        const soloContainers = document.querySelectorAll(`[${ContainerAttributes.INITIALIZER}]:not([${ContainerAttributes.CONTAINER}]>[${ContainerAttributes.INITIALIZER}])`);
+        const soloContainers = document.querySelectorAll(`[${ContainerAttributes.INITIALIZER}]:not([${ContainerAttributes.CONTAINER}] [${ContainerAttributes.INITIALIZER}])`);
 
         const initContainer = (container: Element, resources: IResourceElement[]) => {
             let config = this.getConfig(container);
@@ -86,6 +86,7 @@ class DLightBox {
         for (const container of groupContainers) {
             const _smartAttributes = smartAttributes.map(attr => `[${attr}]`);
             const resources: IResourceElement[] = Array.from(container.querySelectorAll(`${_smartAttributes.join()}`))
+                .filter(element => !element.hasAttribute(ContainerAttributes.IGNORE))
                 .map(element => ({ element, attributes: this.getAttributes(element) }))
             initContainer(container, resources);
         }
