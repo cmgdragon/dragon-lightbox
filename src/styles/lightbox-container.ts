@@ -138,7 +138,7 @@ const lightbox_container_styles = (config: IConfig) =>`
         transform: scale(.6) translateX(3rem);
     }
     .lightbox-container__prev-arrow {
-        transform: scale(-.6) translateX(3rem);
+        transform: scale(-.6) translateX(3rem) rotateX(180deg);
     }
     .lightbox-container__media { 
         max-width: 100%;
