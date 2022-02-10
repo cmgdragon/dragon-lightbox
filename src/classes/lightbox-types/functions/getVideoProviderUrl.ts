@@ -14,8 +14,8 @@ const getVideoProviderUrl = (resourceUrl: string, autoplay: boolean): string => 
                 const validParams = ['t', 'start']
                 let params: string | string[] = videoIdParams.replace(videoId, '').replace('?', '').split('&').filter(p => validParams.includes(p.split('=')[0]));
                 params = params.map(p => {
-                    let newp = p.split('=')
-                    return `${newp[0]}=${newp[1].replace('s', '')}`
+                    const keyValue = p.split('=')
+                    return keyValue[0] && keyValue[1] ? `${keyValue[0]}=${keyValue[1].replace('s', '')}` : ''
                 }).join()
                 params = params.replace(`t=`, 'start=')
                 url = `https://www.youtube.com/embed/${videoId}${params.length > 1 ? `?${params}` : ''}`;
