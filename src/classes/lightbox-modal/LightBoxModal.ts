@@ -26,18 +26,22 @@ class LightBoxModal {
     }
 
     private buildModal(): HTMLElement {
-        const modal = document.createElement('div');
-        modal.id = 'dragon-lightbox-modal';
-        modal.classList.add('lightbox-modal');
+        const modal = document.createElement('div')
+        modal.id = 'dragon-lightbox-modal'
+        modal.classList.add('lightbox-modal')
 
-        modal.prepend(addStyles(this.container.config));
+        modal.prepend(addStyles(this.container.config))
 
-        if (this.container.elements.length == 1) return modal;
+        if (this.container.elements.length == 1) return modal
 
-        modal.addEventListener('touchstart', ({touches}) => this.lastTabPos = touches[0].screenX);
+        modal.addEventListener('touchstart', ({touches}) => {
+            this.lastTabPos = touches[0].screenX;
+            this.container.mediaElement.style.transition = 'none'
+        })
         modal.addEventListener('touchmove', ({touches}) => 
-            this.container.mediaElement.style.transform = `translateX(${touches[0].screenX - this.lastTabPos}px)`);
+            this.container.mediaElement.style.transform = `translateX(${touches[0].screenX - this.lastTabPos}px)`)
         modal.addEventListener('touchend', ({changedTouches}) => {
+            this.container.mediaElement.style.transition = '';
             const endTabPos = changedTouches[0].screenX;
             this.container.mediaElement.style.transform = ``;
             if (Math.abs(endTabPos - this.lastTabPos) < 100) return;
