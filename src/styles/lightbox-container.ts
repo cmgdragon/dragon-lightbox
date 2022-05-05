@@ -51,7 +51,7 @@ const lightbox_container_styles = (config: IConfig) =>`
     height: 3em;
     position: relative;
     margin-bottom: 1rem;
-    transform: scale(.8);
+    transform: scale(1.1);
     opacity: .8;
     transition: transform .3s;
 }
@@ -64,7 +64,7 @@ const lightbox_container_styles = (config: IConfig) =>`
 }
 .lightbox-container__prev-arrow:focus { transform: scale(-1.2); }
 .lightbox-container__prev-arrow {
-    transform: scale(-.8);
+    transform: scale(-1.1);
 }
 .lightbox-container__next-arrow:hover,
 .lightbox-container__prev-arrow:hover {
@@ -127,14 +127,14 @@ const lightbox_container_styles = (config: IConfig) =>`
 }
 @media (hover: none) {
     .lightbox-container > [class*=arrow] { opacity: .8 !important }
-    .lightbox-container__next-arrow:focus { transform: scale(.8) }
-    .lightbox-container__prev-arrow:focus { transform: scale(-.8) }
+    .lightbox-container__next-arrow:focus { transform: scale(1.1) }
+    .lightbox-container__prev-arrow:focus { transform: scale(-1.1) }
 }
 @media (max-width: ${mobile_breakpoint}px) {
     .lightbox-container__next-arrow,
     .lightbox-container__prev-arrow {
         position: absolute;
-        top: 80vh;
+        top: 87vh;
         transform: scale(.6) translateX(3rem);
     }
     .lightbox-container__prev-arrow {
@@ -146,15 +146,15 @@ const lightbox_container_styles = (config: IConfig) =>`
     }
     .lightbox-container__close:focus {
         transform: none;
-        opacity: .8;
+        opacity: 1;
     }
     .lightbox-container__next-arrow:focus {
         transform: scale(.6) translateX(3rem);
-        opacity: .8;
+        opacity: 1;
     }
     .lightbox-container__prev-arrow:focus {
         transform: scale(-.6) translateX(3rem);
-        opacity: .8;
+        opacity: 1;
     }
 }
 `;
