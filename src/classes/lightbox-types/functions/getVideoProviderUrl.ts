@@ -2,14 +2,15 @@ import videoProviders from "../../../constants/videoProviders"
 
 const getVideoProviderUrl = (resourceUrl: string, autoplay: boolean): string => {
 
-    const provider = Object.values(videoProviders).find(provider => resourceUrl.includes(provider));
+    const provider = Object.values(videoProviders).find(provider => resourceUrl.replaceAll('.', '').includes(provider));
     let [url, videoId] = ['', ''];
     
     switch (provider) {
         case videoProviders.YOUTUBE:
             url = resourceUrl;
             if (!resourceUrl.includes('/embed')) {
-                const videoIdParams = resourceUrl.substring(resourceUrl.lastIndexOf('watch?v=') + 8)
+                const lio = resourceUrl.includes('youtu.be') ? '/' : 'watch?v='
+                const videoIdParams = resourceUrl.substring(resourceUrl.lastIndexOf(lio) + lio.length)
                 videoId = videoIdParams.substring(0, videoIdParams.includes('?') ? videoIdParams.indexOf('?') : videoIdParams.includes('&') ? videoIdParams.indexOf('&') : undefined);
                 const validParams = ['t', 'start']
                 let params: string | string[] = videoIdParams.replace(videoId, '').replace('?', '').split('&').filter(p => validParams.includes(p.split('=')[0]));
