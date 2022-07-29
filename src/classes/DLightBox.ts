@@ -88,13 +88,12 @@ class DLightBox {
             const resources: IResourceElement[] = Array.from(container.querySelectorAll(`${_smartAttributes.join()}`))
                 .filter(element => !element.hasAttribute(ContainerAttributes.IGNORE))
                 .map(element => ({ element, attributes: this.getAttributes(element) }))
-            initContainer(container, resources);
+            if (resources.length) initContainer(container, resources);
         }
         
         for (const container of soloContainers) {
             const resources: IResourceElement[] = [{ element: container, attributes: this.getAttributes(container) }]
             initContainer(container, resources);
-
         }
     }
 
