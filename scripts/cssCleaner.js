@@ -1,7 +1,7 @@
-var fs = require('fs');
+import fs from 'fs';
 
 console.log("Cleaning minified CSS...");
-fs.readFile("dist/index.js", function(err, buf) {
+fs.readFile("dist/dragon-lightbox.js", function(err, buf) {
     if (err) console.log(err);
     var file = buf.toString();
     var filepart1 = file.substring(0, file.indexOf('start:css'));
@@ -25,5 +25,11 @@ fs.readFile("dist/index.js", function(err, buf) {
 
         var stats = fs.statSync("dist/dragon-lightbox.min.js");
         console.log("Final bundle size: " + parseFloat(stats.size / 1024).toFixed(2) + " kb")
+
+        fs.unlink('dist/dragon-lightbox.js', (err) => {
+            if (err) {
+              console.error(err);
+            }
+          });
     });
 });

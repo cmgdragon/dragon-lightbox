@@ -1,5 +1,4 @@
 import ElementBind from "../types/ElementBind";
-import IConfig from "./IConfig";
 
 interface ILightBoxContainerInstance {
     open: (number?: number) => void,

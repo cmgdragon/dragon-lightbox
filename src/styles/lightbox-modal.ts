@@ -1,6 +1,6 @@
 import IConfig from "../interfaces/IConfig";
 
-const lightbox_modal_styles = (config: IConfig) => `
+const lightbox_modal_styles = (_config: IConfig) => `
 .dlightbox-hidden {
     overflow: hidden !important;
 }

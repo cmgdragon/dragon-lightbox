@@ -1,6 +1,6 @@
 import IConfig from "../interfaces/IConfig";
 
-const lightbox_spinner_styles = (config: IConfig) => `
+const lightbox_spinner_styles = (_config: IConfig) => `
 .lightbox-spinner {
     width: 15vw;
     height: 15vw;

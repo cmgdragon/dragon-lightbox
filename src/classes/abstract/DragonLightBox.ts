@@ -1,4 +1,3 @@
-import ContainerAttributes from "../../constants/containerAttributes";
 import IConfig from "../../interfaces/IConfig";
 import IDragonLightBox from "../../interfaces/IDragonLightBox";
 import Attribute from "../../types/Attribute";

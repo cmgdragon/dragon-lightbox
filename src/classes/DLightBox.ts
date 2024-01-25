@@ -10,34 +10,34 @@ import smartAttributes from "../constants/smartAttributes";
 
 class DLightBox {
 
-    static _instances: Map<number, ILightBoxContainerInstance>;
+    private _instances: Map<number, ILightBoxContainerInstance>;
     constructor() {
-        DLightBox._instances = new Map<number, ILightBoxContainerInstance>();
+        this._instances = new Map<number, ILightBoxContainerInstance>();
         this.autoinit();
     }
 
     get instances() {
-        return DLightBox._instances;
+        return this._instances;
     }
 
-    static createInstanceObject = (lb: LightBoxContainer): ILightBoxContainerInstance => {
+    private createInstanceObject = (lb: LightBoxContainer): ILightBoxContainerInstance => {
         const instance = {
             open: lb.openContainer.bind(lb),
             close: lb.destroyContainer.bind(lb),
-            remove: () => DLightBox.removeInstanceObject(lb),
+            remove: () => this.removeInstanceObject(lb),
             bind: lb.addNodeEventListeners.bind(lb),
             listen: lb.listen.bind(lb),
             elements: lb.elements,
             bindings: lb.bindings
         }
-        DLightBox._instances.set(DLightBox._instances.size == 0 ? 0 : 
-            [...DLightBox._instances.keys()][DLightBox._instances.size-1]+1, instance)
+        this.instances.set(this.instances.size == 0 ? 0 : 
+            [...this.instances.keys()][this.instances.size-1]+1, instance)
         return instance;
     }
 
-    static removeInstanceObject = (lb: LightBoxContainer): void => {
+    private removeInstanceObject = (lb: LightBoxContainer): void => {
         lb.removeNodeEventListeners.call(lb);
-        DLightBox._instances.delete(lb.id);
+        this.instances.delete(lb.id);
     }
 
     create(resources: [string, Attribute[]?] | [string, Attribute[]?][], _config?: IConfig): ILightBoxContainerInstance {
@@ -47,10 +47,10 @@ class DLightBox {
             const resourcesList = Array.isArray(resources[0]) ? resources : [[resources]];
             const resourceElements: IResourceElement[] = new Array<IResourceElement>();
 
-            for (const [url, attributes] of resourcesList) {
+            for (const [url, attributes] of resourcesList as Array<any>) {
 
                 const element = document.createElement('div');
-                const _attributes = <Attribute[]> attributes ?? null;
+                const _attributes = attributes ?? null;
 
                 if (_attributes && _attributes.find(a => a.name === ContainerAttributes.TYPE)) {
                     element.setAttribute(ContainerAttributes.TYPE, _attributes.find(a => a.name === ContainerAttributes.TYPE)?.value ?? '')
@@ -61,13 +61,18 @@ class DLightBox {
             }
 
             const config = _config ? { ...defaultConfig, ..._config } : defaultConfig;
-            const lb = new LightBoxContainer(resourceElements, config, true);
+            const lb = new LightBoxContainer(this.instances.size, resourceElements, config, true);
     
-            return DLightBox.createInstanceObject(lb);
+            return this.createInstanceObject(lb);
 
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(`Invalid dlightbox input: ${error.message}`);
         }       
+    }
+
+    refresh() {
+        this.instances.forEach(i => i.remove());
+        this.autoinit();
     }
 
     private autoinit(): void {
@@ -79,8 +84,8 @@ class DLightBox {
             config.attributes = this.getAttributes(container);
             config = { ...config, ...this.getConfig(container, config.attributes) }
 
-            const lb = new LightBoxContainer(resources, config);
-            DLightBox.createInstanceObject(lb);
+            const lb = new LightBoxContainer(this.instances.size, resources, config);
+            this.createInstanceObject(lb);
         }
 
         for (const container of groupContainers) {

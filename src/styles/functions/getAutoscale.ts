@@ -14,6 +14,6 @@ export const autoscale_embed = (autoscale: boolean | number) => {
     ${autoscale ? 'width: 100%' : 'width: 55vw'};
     ${autoscale ? 'height: calc(100vw - 55vw)' : 'height: calc(50vw - 20vw)'};
     ${Number.isInteger(autoscale) ? `max-width: ${autoscale}px` : ''};
-    ${Number.isInteger(autoscale) ? `max-height: calc(${autoscale}px - calc(${autoscale >= 300 ? '300px' : `${autoscale}px`} / 2.2))` : ''};
+    ${Number.isInteger(autoscale) ? `max-height: calc(${autoscale}px - calc(${+autoscale >= 300 ? '300px' : `${autoscale}px`} / 2.2))` : ''};
     `
 }

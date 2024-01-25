@@ -37,7 +37,7 @@ https://cmgdragon.github.io/dragon-lightbox/
 Add the following script
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/dragon-lightbox@1.3.4/dist/dragon-lightbox.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dragon-lightbox@1.3.5/dist/dragon-lightbox.min.js"></script>
 ```
 
 at the end of the `<body>` tag of your html file.
@@ -143,15 +143,16 @@ Define the configurations with the prefix `data-{config}`.
 |  For the `attributes`, the plugin will take any HTML attribute for all resources and copy them to the corresponding lightbox resource. It will also copy all `data-{attribute}` without the `data-`, so if you want to add, for instance, an "alt" attribute to an anchor element, use `data-alt`. If you want to add an "alt" to an image, simply keep its conventional `alt` |
 
 ## API
-A `dragonLightBox` object is exposed to the window object, with a method and a property:
-
-| Method  |  Description |
-| ------------ | ------------ |
-|  `create` | allows the creation of lightbox objects programmatically  |
+A `dragonLightBox` object is exposed to the window object, with a propertiy and two methods:
 
 | Property  |  Description |
 | ------------ | ------------ |
 |  `instances` | returns a map with the active lightbox instances  |
+
+| Method  |  Description |
+| ------------ | ------------ |
+|  `create` | allows the creation of lightbox objects programmatically  |
+|  `refresh` | will remove all the lightbox instances, scan the entire document and recreate them again  |
 
 
 ### Create an instance

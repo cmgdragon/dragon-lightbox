@@ -1,7 +1,7 @@
 import IConfig from "../interfaces/IConfig";
 import mobile_breakpoint from "../constants/mobile_breakpoint";
 
-const lightbox_types_styles = (config: IConfig) =>`
+const lightbox_types_styles = (_config: IConfig) =>`
 .dlightbox-image {
     max-height: inherit;
     max-width: unset;

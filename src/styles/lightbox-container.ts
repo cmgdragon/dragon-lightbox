@@ -1,7 +1,7 @@
 import mobile_breakpoint from "../constants/mobile_breakpoint";
 import IConfig from "../interfaces/IConfig";
 
-const lightbox_container_styles = (config: IConfig) =>`
+const lightbox_container_styles = (_config: IConfig) =>`
 .lightbox-container {
     display: flex;
     width: 100%;

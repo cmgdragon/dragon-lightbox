@@ -5,7 +5,6 @@ import IEventDetail from "../../interfaces/IEventDetail";
 import IResourceElement from "../../interfaces/IResourceElement";
 import ElementBind from "../../types/ElementBind";
 import DragonLightBox from "../abstract/DragonLightBox";
-import DLightBox from "../DLightBox";
 import LightBoxList from "../lightbox-list/LightBoxList";
 import LightBoxNode from "../lightbox-list/LightBoxNode";
 import LightBoxModal from "../lightbox-modal/LightBoxModal";
@@ -26,9 +25,9 @@ class LightBoxContainer {
     mediaElement: HTMLElement;
     private events: Map<String, CustomEvent>;
 
-    constructor(resources: IResourceElement[], config: IConfig, nobind?: boolean) {
+    constructor(size ,resources: IResourceElement[], config: IConfig, nobind?: boolean) {
         this.container = null;
-        this.id = DLightBox._instances.size;
+        this.id = size;
         this.mediaElement = document.createElement('div');
         this._config = config;
         this.modal = new LightBoxModal(this);
