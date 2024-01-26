@@ -8,6 +8,10 @@ export default defineConfig({
     build: {
         assetsDir: '',
         minify: 'terser',
+        lib: {
+            entry: './index.ts',
+            name: 'dragonLightbox'
+        },
         terserOptions: {
             compress: {
                 passes: 3

@@ -143,7 +143,7 @@ Define the configurations with the prefix `data-{config}`.
 |  For the `attributes`, the plugin will take any HTML attribute for all resources and copy them to the corresponding lightbox resource. It will also copy all `data-{attribute}` without the `data-`, so if you want to add, for instance, an "alt" attribute to an anchor element, use `data-alt`. If you want to add an "alt" to an image, simply keep its conventional `alt` |
 
 ## API
-A `dragonLightBox` object is exposed to the window object, with a propertiy and two methods:
+A `dragonLightBox` object is exposed to the window object, with a property and two methods:
 
 | Property  |  Description |
 | ------------ | ------------ |
